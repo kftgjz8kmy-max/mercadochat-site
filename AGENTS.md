@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This repository contains the ChatoMerc marketing landing page. The Next/Vinext App Router entry points are in `app/` (`page.tsx`, `layout.tsx`, and global styles). Shared product copy and navigation live in `config/landing.ts` and `config/site.ts`; update those files instead of scattering marketing text through components. Static assets are under `public/`, with design references in `References/`. The Cloudflare Worker adapter is `worker/index.ts`. Tests are in `tests/`.
+This repository contains the MercadoChat marketing landing page. The Next/Vinext App Router entry points are in `app/` (`page.tsx`, `layout.tsx`, and global styles). Shared product copy and navigation live in `config/landing.ts` and `config/site.ts`; update those files instead of scattering marketing text through components. Static assets are under `public/`, with design references in `References/`. The Cloudflare Worker adapter is `worker/index.ts`. Tests are in `tests/`.
 
 Generated output such as `.next/`, `dist/`, `build/`, `.vinext/`, and `.wrangler/` should not be edited or committed.
 
