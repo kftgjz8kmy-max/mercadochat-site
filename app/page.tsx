@@ -5,8 +5,21 @@ import { useEffect, useRef, useState } from "react";
 import { landing, type UseCaseCard } from "@/config/landing";
 import { siteConfig } from "@/config/site";
 
-function Button({ children, outline = false, href = siteConfig.whatsappUrl }: { children: React.ReactNode; outline?: boolean; href?: string }) {
-  return <a className={`button ${outline ? "button-outline" : ""}`} href={href}>{children}<span aria-hidden="true">{outline ? "→" : "◔"}</span></a>;
+type HeroIconName = "sparkle" | "arrow" | "shield" | "lock" | "check" | "send" | "double-check";
+
+function HeroIcon({ name, size = 18 }: { name: HeroIconName; size?: number }) {
+  const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.9, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
+  if (name === "sparkle") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="m12 3-1.7 5.3L5 10l5.3 1.7L12 17l1.7-5.3L19 10l-5.3-1.7z"/><path {...common} d="m19 15-.7 2.3L16 18l2.3.7L19 21l.7-2.3L22 18l-2.3-.7z"/></svg>;
+  if (name === "arrow") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="M5 12h14M13 6l6 6-6 6"/></svg>;
+  if (name === "shield") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="M12 3 5 6v5c0 4.6 2.9 8.4 7 10 4.1-1.6 7-5.4 7-10V6z"/><path {...common} d="m8.8 12 2.1 2.1 4.3-4.4"/></svg>;
+  if (name === "lock") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><rect {...common} x="5" y="10" width="14" height="10" rx="2"/><path {...common} d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2"/></svg>;
+  if (name === "check") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><circle {...common} cx="12" cy="12" r="8.5"/><path {...common} d="m8.5 12 2.3 2.3 4.7-4.8"/></svg>;
+  if (name === "send") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="m4 4 16 8-16 8 3-8z"/><path {...common} d="M7 12h13"/></svg>;
+  return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="m4 12 3 3 6-7"/><path {...common} d="m11 12 3 3 6-7"/></svg>;
+}
+
+function Button({ children, outline = false, href = siteConfig.whatsappUrl, icon = false }: { children: React.ReactNode; outline?: boolean; href?: string; icon?: boolean }) {
+  return <a className={`button ${outline ? "button-outline" : ""}`} href={href}>{children}{icon && <HeroIcon name="arrow" size={17} />}</a>;
 }
 
 function SectionTitle({ children, id }: { children: React.ReactNode; id?: string }) {
@@ -104,7 +117,7 @@ export default function Home() {
   };
   return <main>
     <header className="header shell">
-      <a href="#inicio" className="brand"><span>chato</span><b>merc</b><i /></a>
+      <a href="#inicio" className="brand"><span>Chato</span><b>Merc</b><i /></a>
       <nav>{siteConfig.navigation.map((item) => <a key={item.href} href={item.href}>{item.label}</a>)}</nav>
       <Button>Solicitar demo</Button>
     </header>
@@ -117,19 +130,25 @@ export default function Home() {
         <div className="hero-dots hero-dots-bottom" />
       </div>
       <div className="hero-copy">
-        <p className="eyebrow"><span>✦</span>{landing.hero.eyebrow}</p>
+        <p className="eyebrow"><HeroIcon name="sparkle" size={16} />{landing.hero.eyebrow}</p>
         <h1>Gestiona Mercado Libre hablando con una IA que <em>entiende tu negocio.</em></h1>
         <p className="hero-description">{landing.hero.description}</p>
-        <div className="button-row"><Button>Solicitar demostración</Button><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
-        <div className="quick-points"><span>⌖ Conexión oficial con ML</span><span>◉ Respuestas en segundos</span><span>✓ Confirmación antes de actuar</span><span>▣ Datos siempre seguros</span></div>
+        <div className="button-row"><Button icon>Comenzar gratis</Button><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
+        <div className="quick-points"><span><HeroIcon name="shield" />Sin tarjetas de crédito</span><span><HeroIcon name="lock" />Datos seguros y privados</span><span><HeroIcon name="check" />Cancela cuando quieras</span></div>
       </div>
       <div className="hero-visual" aria-label="Ejemplo de una conversación con ChatoMerc">
         <div className="chat-window">
-          <div className="message question">¿Cuáles fueron mis productos más vendidos esta semana?</div>
-          <div className="message answer">Aquí están tus 3 productos más vendidos esta semana <small>(20 – 26 Mayo)</small></div>
-          {[['Freidora de aire 5.5 L','47 unidades','S/ 11,703.00'],['Taladro inalámbrico 21 V','28 unidades','S/ 6,692.00'],['Zapatillas deportivas','19 unidades','S/ 3,401.00']].map(([name, units, price], index) => <div className="product-row" key={name}><div className={`product-thumb product-thumb-${index}`} /><strong>{name}</strong><span><b>{units}</b><small>{price}</small></span></div>)}
-          <div className="message question short">¿Quieres ver el detalle de ventas por día?</div>
-          <div className="chat-input">Escribe tu pregunta... <b>→</b></div>
+          <div className="chat-header"><strong>ChatoMerc</strong><span><i />En línea</span></div>
+          <div className="chat-body">
+            <div className="chat-message chat-message-user">¿Cuáles son mis productos más vendidos<br />en los últimos 30 días?<small>10:32 <b><HeroIcon name="double-check" size={15} /></b></small></div>
+            <div className="chat-message chat-message-assistant">Aquí tienes tus productos más vendidos<br />en los últimos 30 días.<small>10:32</small></div>
+            <div className="sales-table">
+              <div className="sales-table-head"><span>Producto</span><span>Unidades vendidas</span><span>Facturación</span></div>
+              {[['Auriculares Bluetooth Inalámbricos','263','$ 1.196.250'],['Cargador Rápido USB-C 20W','198','$ 683.100'],['Soporte para Celular de Auto','154','$ 354.200'],['Cable USB-C a Lightning 1m','142','$ 245.600'],['Smartwatch Deportivo IP68','116','$ 1.045.800']].map(([name, units, total]) => <div className="sales-table-row" key={name}><span>{name}</span><span>{units}</span><span>{total}</span></div>)}
+            </div>
+            <div className="chat-input">Escribí tu mensaje... <b><HeroIcon name="send" size={20} /></b></div>
+            <p className="chat-disclaimer">ChatoMerc puede cometer errores. Verificá siempre la información importante.</p>
+          </div>
         </div>
       </div>
     </section>

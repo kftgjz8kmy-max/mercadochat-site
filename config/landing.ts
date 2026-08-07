@@ -6,7 +6,7 @@ export const landing = {
   hero: {
     eyebrow: "Asistente IA para Mercado Libre",
     description:
-      "Consulta ventas, revisa órdenes, investiga productos y prepara publicaciones usando lenguaje natural.",
+      "Empieza a vender, mejora tus publicaciones y entiende tus ganancias con un asistente que trabaja por ti.",
   },
   useCases: [
     { id: "create-listing", category: "Crea una publicación", prompt: "Quiero vender este celular. Está nuevo, tiene 256 GB y tengo tres unidades.", resultType: "listing", resultTitle: "Publicación lista para revisar" },
