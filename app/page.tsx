@@ -69,6 +69,7 @@ export default function Home() {
   const showcasePausedRef = useRef(false);
   const showcaseResumeTimerRef = useRef<number | null>(null);
   const showcaseDragRef = useRef({ active: false, pointerId: 0, startX: 0, startScroll: 0 });
+  const showcaseTouchRef = useRef({ active: false, startX: 0, startY: 0, startScroll: 0 });
   const [isDraggingShowcase, setIsDraggingShowcase] = useState(false);
   const showcasePages = 4;
   useEffect(() => {
@@ -117,6 +118,34 @@ export default function Home() {
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
     showcasePausedRef.current = false;
   };
+  const startShowcaseTouch = (event: React.TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+    const carousel = event.currentTarget;
+    showcasePausedRef.current = true;
+    showcaseTouchRef.current = { active: true, startX: touch.clientX, startY: touch.clientY, startScroll: carousel.scrollLeft };
+  };
+  const moveShowcaseTouch = (event: React.TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    const drag = showcaseTouchRef.current;
+    if (!drag.active || !touch) return;
+    const distanceX = touch.clientX - drag.startX;
+    const distanceY = touch.clientY - drag.startY;
+    if (Math.abs(distanceY) > Math.abs(distanceX)) {
+      drag.active = false;
+      showcasePausedRef.current = false;
+      return;
+    }
+    event.preventDefault();
+    if (Math.abs(distanceX) > 2) setIsDraggingShowcase(true);
+    event.currentTarget.scrollLeft = drag.startScroll - distanceX;
+  };
+  const stopShowcaseTouch = () => {
+    if (!showcaseTouchRef.current.active) return;
+    showcaseTouchRef.current.active = false;
+    setIsDraggingShowcase(false);
+    showcasePausedRef.current = false;
+  };
   return <main>
     <header className="header shell">
       <a href="#inicio" className="brand" aria-label="MercadoChat"><img className="brand-logo-full" src="/brand/mercadochat-logo.png" alt="MercadoChat" width="220" height="60" /><img className="brand-logo-icon" src="/brand/mercadochat-icon.png" alt="" width="48" height="48" /></a>
@@ -147,7 +176,7 @@ export default function Home() {
             <div className="chat-message chat-message-assistant">Aquí tienes tus productos más vendidos<br />en los últimos 30 días.<small>10:32</small></div>
             <div className="sales-table">
               <div className="sales-table-head"><span>Producto</span><span>Unidades vendidas</span><span>Facturación</span></div>
-              {[['Auriculares Bluetooth Inalámbricos','263','$ 1.196.250'],['Cargador Rápido USB-C 20W','198','$ 683.100'],['Soporte para Celular de Auto','154','$ 354.200'],['Cable USB-C a Lightning 1m','142','$ 245.600'],['Smartwatch Deportivo IP68','116','$ 1.045.800']].map(([name, units, total]) => <div className="sales-table-row" key={name}><span>{name}</span><span>{units}</span><span>{total}</span></div>)}
+              {[['Auriculares Bluetooth Inalámbricos','47','S/ 11,703'],['Cargador Rápido USB-C 20W','36','S/ 6,444'],['Soporte para Celular de Auto','29','S/ 3,741'],['Cable USB-C a Lightning 1m','24','S/ 2,136'],['Smartwatch Deportivo IP68','18','S/ 8,442']].map(([name, units, total]) => <div className="sales-table-row" key={name}><span>{name}</span><span>{units}</span><span>{total}</span></div>)}
             </div>
             <div className="chat-input">Escribí tu mensaje... <b><HeroIcon name="send" size={20} /></b></div>
             <p className="chat-disclaimer">MercadoChat puede cometer errores. Verificá siempre la información importante.</p>
@@ -156,7 +185,7 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="showcase shell"><SectionTitle>Mira lo que puedes lograr en segundos</SectionTitle><div ref={showcaseRef} className={`showcase-carousel ${isDraggingShowcase ? "is-dragging" : ""}`} aria-label="Ejemplos de conversaciones y resultados en MercadoChat" onPointerDown={startShowcaseDrag} onPointerMove={dragShowcase} onPointerUp={stopShowcaseDrag} onPointerCancel={stopShowcaseDrag} onScroll={(event) => { const loopWidth = event.currentTarget.scrollWidth / 2; setActiveShowcasePage(Math.min(showcasePages - 1, Math.floor((event.currentTarget.scrollLeft % loopWidth) / (loopWidth / showcasePages)))); }}><div className="carousel"><ShowcaseCards /><ShowcaseCards duplicate /></div></div><div className="dots" aria-label="Navegación de ejemplos">{Array.from({ length: showcasePages }, (_, index) => <button key={index} className={activeShowcasePage === index ? "active" : ""} onClick={() => moveShowcase(index)} aria-label={`Ver ejemplos ${index + 1}`} aria-current={activeShowcasePage === index} />)}</div></section>
+    <section className="showcase shell"><SectionTitle>Mira lo que puedes lograr en segundos</SectionTitle><div ref={showcaseRef} className={`showcase-carousel ${isDraggingShowcase ? "is-dragging" : ""}`} aria-label="Ejemplos de conversaciones y resultados en MercadoChat" onPointerDown={startShowcaseDrag} onPointerMove={dragShowcase} onPointerUp={stopShowcaseDrag} onPointerCancel={stopShowcaseDrag} onTouchStart={startShowcaseTouch} onTouchMove={moveShowcaseTouch} onTouchEnd={stopShowcaseTouch} onTouchCancel={stopShowcaseTouch} onScroll={(event) => { const loopWidth = event.currentTarget.scrollWidth / 2; setActiveShowcasePage(Math.min(showcasePages - 1, Math.floor((event.currentTarget.scrollLeft % loopWidth) / (loopWidth / showcasePages)))); }}><div className="carousel"><ShowcaseCards /><ShowcaseCards duplicate /></div></div><div className="dots" aria-label="Navegación de ejemplos">{Array.from({ length: showcasePages }, (_, index) => <button key={index} className={activeShowcasePage === index ? "active" : ""} onClick={() => moveShowcase(index)} aria-label={`Ver ejemplos ${index + 1}`} aria-current={activeShowcasePage === index} />)}</div></section>
 
     <section id="funciones" className="features shell"><SectionTitle>Todo lo que necesitas en un solo asistente</SectionTitle><div>{landing.features.map(([icon, title, items]) => <article key={title}><span className="feature-icon"><img src={icon} alt="" width="96" height="96" /></span><h3>{title}</h3><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></section>
 
