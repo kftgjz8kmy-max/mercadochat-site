@@ -69,7 +69,7 @@ export default function Home() {
   const showcasePausedRef = useRef(false);
   const showcaseResumeTimerRef = useRef<number | null>(null);
   const showcaseDragRef = useRef({ active: false, pointerId: 0, startX: 0, startScroll: 0 });
-  const showcaseTouchRef = useRef({ active: false, startX: 0, startY: 0, startScroll: 0 });
+  const showcaseTouchRef = useRef({ active: false, startX: 0, startY: 0, lastX: 0, startScroll: 0 });
   const [isDraggingShowcase, setIsDraggingShowcase] = useState(false);
   const showcasePages = 4;
   useEffect(() => {
@@ -95,6 +95,10 @@ export default function Home() {
     setActiveShowcasePage(page);
     if (showcaseResumeTimerRef.current) window.clearTimeout(showcaseResumeTimerRef.current);
     showcaseResumeTimerRef.current = window.setTimeout(() => { showcasePausedRef.current = false; }, 700);
+  };
+  const scheduleShowcaseResume = (delay = 900) => {
+    if (showcaseResumeTimerRef.current) window.clearTimeout(showcaseResumeTimerRef.current);
+    showcaseResumeTimerRef.current = window.setTimeout(() => { showcasePausedRef.current = false; }, delay);
   };
   const startShowcaseDrag = (event: React.PointerEvent<HTMLDivElement>) => {
     if (event.pointerType !== "mouse" || event.button !== 0) return;
@@ -123,7 +127,8 @@ export default function Home() {
     if (!touch) return;
     const carousel = event.currentTarget;
     showcasePausedRef.current = true;
-    showcaseTouchRef.current = { active: true, startX: touch.clientX, startY: touch.clientY, startScroll: carousel.scrollLeft };
+    showcaseTouchRef.current = { active: true, startX: touch.clientX, startY: touch.clientY, lastX: touch.clientX, startScroll: carousel.scrollLeft };
+    scheduleShowcaseResume(1800);
   };
   const moveShowcaseTouch = (event: React.TouchEvent<HTMLDivElement>) => {
     const touch = event.touches[0];
@@ -137,14 +142,25 @@ export default function Home() {
       return;
     }
     event.preventDefault();
+    drag.lastX = touch.clientX;
     if (Math.abs(distanceX) > 2) setIsDraggingShowcase(true);
     event.currentTarget.scrollLeft = drag.startScroll - distanceX;
   };
-  const stopShowcaseTouch = () => {
+  const stopShowcaseTouch = (event: React.TouchEvent<HTMLDivElement>) => {
     if (!showcaseTouchRef.current.active) return;
-    showcaseTouchRef.current.active = false;
+    const drag = showcaseTouchRef.current;
+    const distanceX = drag.lastX - drag.startX;
+    const carousel = event.currentTarget;
+    if (Math.abs(distanceX) > 12) {
+      const direction = distanceX < 0 ? 1 : -1;
+      const step = Math.max(carousel.clientWidth * 0.82, 220);
+      const steps = Math.max(1, Math.round(Math.abs(distanceX) / step));
+      const target = Math.max(0, Math.min(carousel.scrollWidth - carousel.clientWidth, drag.startScroll + direction * steps * step));
+      carousel.scrollTo({ left: target, behavior: "smooth" });
+    }
+    drag.active = false;
     setIsDraggingShowcase(false);
-    showcasePausedRef.current = false;
+    scheduleShowcaseResume(900);
   };
   return <main>
     <header className="header shell">
