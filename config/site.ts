@@ -7,5 +7,6 @@ export const siteConfig = {
     { label: "Planes", href: "#planes" },
     { label: "Seguridad", href: "#seguridad" },
     { label: "FAQ", href: "#faq" },
+    { label: "IA para tu negocio?", href: "#inicio", icon: "lightbulb" },
   ],
 } as const;

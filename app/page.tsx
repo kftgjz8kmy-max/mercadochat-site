@@ -175,7 +175,7 @@ export default function Home() {
   return <main>
     <header className="header shell">
       <a href="#inicio" className="brand" aria-label="MercadoChat"><img className="brand-logo-full" src="/brand/mercadochat-logo.png" alt="MercadoChat" width="220" height="60" /><img className="brand-logo-icon" src="/brand/mercadochat-icon.png" alt="" width="48" height="48" /></a>
-      <nav className={mobileMenuOpen ? "mobile-nav-open" : ""}>{siteConfig.navigation.map((item) => <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}</a>)}</nav>
+      <nav className={mobileMenuOpen ? "mobile-nav-open" : ""}>{siteConfig.navigation.map((item) => <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}{"icon" in item && item.icon === "lightbulb" && <img className="nav-lightbulb" style={{ transform: "translateY(-2px)" }} src="/images/lightbulb-idea.png" alt="" aria-hidden="true" width="18" height="18" />}</a>)}</nav>
       <Button>Comienza Gratis</Button>
       <button className="mobile-menu" type="button" aria-label="Abrir menú" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}><span /><span /><span /></button>
     </header>
