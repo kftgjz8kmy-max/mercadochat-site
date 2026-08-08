@@ -33,10 +33,10 @@ export const landing = {
     { eyebrow: "Convierte datos en acción", image: "/images/lifestyle/sales-analysis.png", alt: "Equipo de ecommerce analizando el rendimiento de sus ventas", note: "Detecta oportunidades para crecer con claridad." },
   ],
   features: [
-    ["/images/feature-icons/publishing.png", "Publica en minutos", ["Crea una publicación conversando", "Publica desde una foto", "Completa y verifica datos técnicos"]],
-    ["/images/feature-icons/market-research.png", "Aumenta tu margen", ["Compara tus precios", "Calcula descuentos", "Crea promociones", "Agrega productos a promociones"]],
-    ["/images/feature-icons/order-management.png", "Ten todo bajo control", ["Calcula ganancias en Excel", "Actualiza precios y stock", "Consulta tu última venta", "Identifica los más y menos vendidos"]],
-    ["/images/feature-icons/sales-insights.png", "Haz crecer tus ventas", ["Encuentra productos que no se venden", "Optimiza publicaciones", "Genera un diagnóstico trimestral"]],
+    ["/images/feature-icons/publishing.svg", "Publica en minutos", ["Crea una publicación conversando", "Publica desde una foto", "Completa y verifica datos técnicos"]],
+    ["/images/feature-icons/market-research.svg", "Aumenta tu margen", ["Compara tus precios", "Calcula descuentos", "Crea promociones", "Agrega productos a promociones"]],
+    ["/images/feature-icons/order-management.svg", "Ten todo bajo control", ["Calcula ganancias en Excel", "Actualiza precios y stock", "Consulta tu última venta", "Identifica los más y menos vendidos"]],
+    ["/images/feature-icons/sales-insights.svg", "Haz crecer tus ventas", ["Encuentra productos que no se venden", "Optimiza publicaciones", "Genera un diagnóstico trimestral"]],
   ],
   steps: [
     ["1", "Conecta tu cuenta", "Autoriza tu cuenta de Mercado Libre con una conexión oficial y segura."],

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { landing, type UseCaseCard } from "@/config/landing";
 import { siteConfig } from "@/config/site";
 
-type HeroIconName = "sparkle" | "arrow" | "shield" | "lock" | "check" | "send" | "double-check";
+type HeroIconName = "sparkle" | "arrow" | "shield" | "lock" | "check" | "publish" | "clock" | "confirm" | "send" | "double-check";
 
 function HeroIcon({ name, size = 18 }: { name: HeroIconName; size?: number }) {
   const common = { fill: "none", stroke: "currentColor", strokeWidth: 1.9, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
@@ -14,6 +14,9 @@ function HeroIcon({ name, size = 18 }: { name: HeroIconName; size?: number }) {
   if (name === "shield") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="M12 3 5 6v5c0 4.6 2.9 8.4 7 10 4.1-1.6 7-5.4 7-10V6z"/><path {...common} d="m8.8 12 2.1 2.1 4.3-4.4"/></svg>;
   if (name === "lock") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><rect {...common} x="5" y="10" width="14" height="10" rx="2"/><path {...common} d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2"/></svg>;
   if (name === "check") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><circle {...common} cx="12" cy="12" r="8.5"/><path {...common} d="m8.5 12 2.3 2.3 4.7-4.8"/></svg>;
+  if (name === "publish") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h7l4 4v11h-11z" fill="currentColor"/><path d="M13.5 4.5v4h4" fill="none" stroke="#FFF8EC" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 17V10m-3 3 3-3 3 3" fill="none" stroke="#FFF8EC" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+  if (name === "clock") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><circle cx="11.5" cy="12.5" r="8.5" fill="currentColor"/><path d="M11.5 8.5v4l2.8 1.8" fill="none" stroke="#FFF8EC" strokeWidth="2.2" strokeLinecap="round"/><circle cx="18.3" cy="5.8" r="2" fill="#FBBF24"/></svg>;
+  if (name === "confirm") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><rect x="4.5" y="5" width="15" height="14" rx="3.5" fill="currentColor"/><path d="m8 12.5 2.5 2.5 5.5-5.5" fill="none" stroke="#FFF8EC" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="18.2" cy="17.8" r="3.1" fill="#FBBF24"/><path d="M17.4 16.6v2.4m1.6-2.4v2.4" stroke="#2563EB" strokeWidth="1.2" strokeLinecap="round"/></svg>;
   if (name === "send") return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="m4 4 16 8-16 8 3-8z"/><path {...common} d="M7 12h13"/></svg>;
   return <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="m4 12 3 3 6-7"/><path {...common} d="m11 12 3 3 6-7"/></svg>;
 }
@@ -67,6 +70,7 @@ export default function Home() {
   const [activeShowcasePage, setActiveShowcasePage] = useState(0);
   const showcaseRef = useRef<HTMLDivElement>(null);
   const showcasePausedRef = useRef(false);
+  const showcaseAutoScrollRef = useRef<number | null>(null);
   const showcaseResumeTimerRef = useRef<number | null>(null);
   const showcaseDragRef = useRef({ active: false, pointerId: 0, startX: 0, startScroll: 0 });
   const showcaseTouchRef = useRef({ active: false, startX: 0, startY: 0, lastX: 0, startScroll: 0 });
@@ -77,10 +81,16 @@ export default function Home() {
     const interval = window.setInterval(() => {
       const time = Date.now();
       const carousel = showcaseRef.current;
-      if (carousel && !showcasePausedRef.current) {
+      if (carousel && showcasePausedRef.current) {
+        showcaseAutoScrollRef.current = carousel.scrollLeft;
+      } else if (carousel) {
         const loopWidth = carousel.scrollWidth / 2;
-        carousel.scrollLeft += (time - previousTime) * 0.018;
-        if (carousel.scrollLeft >= loopWidth) carousel.scrollLeft -= loopWidth;
+        const currentPosition = showcaseAutoScrollRef.current ?? carousel.scrollLeft;
+        const nextPosition = currentPosition + (time - previousTime) * 0.018;
+        showcaseAutoScrollRef.current = nextPosition >= loopWidth ? nextPosition - loopWidth : nextPosition;
+        // Keep fractional progress in memory, but assign whole pixels for
+        // WebKit versions that round element.scrollLeft values.
+        carousel.scrollLeft = Math.floor(showcaseAutoScrollRef.current);
       }
       previousTime = time;
     }, 32);
@@ -182,7 +192,7 @@ export default function Home() {
         <h1>Gestiona Mercado Libre hablando con una IA que <em>entiende tu negocio.</em></h1>
         <p className="hero-description">{landing.hero.description}</p>
         <div className="button-row"><Button icon>Comenzar gratis</Button><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
-        <div className="quick-points"><span><HeroIcon name="shield" />Sin tarjetas de crédito</span><span><HeroIcon name="lock" />Datos seguros y privados</span><span><HeroIcon name="check" />Cancela cuando quieras</span></div>
+        <div className="quick-points"><span><img src="/images/quick-points/publish.png" alt="" width="28" height="28" />Publica sin complicaciones</span><span><img src="/images/quick-points/clock.png" alt="" width="28" height="28" />Ahorra horas de trabajo manual</span><span><img src="/images/quick-points/language.png" alt="" width="28" height="28" />Gestiona tu cuenta con lenguaje natural</span></div>
       </div>
       <div className="hero-visual" aria-label="Ejemplo de una conversación con MercadoChat">
         <div className="chat-window">
