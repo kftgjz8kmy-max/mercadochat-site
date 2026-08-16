@@ -1,7 +1,11 @@
 export const siteConfig = {
-  name: "MercadoChat",
+  name: "merchat",
   description: "El asistente IA para vendedores de Mercado Libre.",
-  whatsappUrl: "https://wa.me/51999999999?text=Hola%2C%20quiero%20conocer%20MercadoChat",
+  whatsappUrl: "https://wa.me/51999999999?text=Hola%2C%20quiero%20conocer%20merchat",
+  brand: {
+    logo: "/brand/merchat-logo.png",
+    icon: "/brand/merchat-icon.png",
+  },
   navigation: [
     { label: "Funciones", href: "#funciones" },
     { label: "Planes", href: "#planes" },

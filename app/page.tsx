@@ -174,7 +174,7 @@ export default function Home() {
   };
   return <main>
     <header className="header shell">
-      <a href="#inicio" className="brand" aria-label="MercadoChat"><img className="brand-logo-full" src="/brand/mercadochat-logo.png" alt="MercadoChat" width="220" height="60" /><img className="brand-logo-icon" src="/brand/mercadochat-icon.png" alt="" width="48" height="48" /></a>
+      <a href="#inicio" className="brand" aria-label={siteConfig.name}><img className="brand-logo-full" src={siteConfig.brand.logo} alt={siteConfig.name} width="241" height="71" /><img className="brand-logo-icon" src={siteConfig.brand.icon} alt="" width="48" height="48" /></a>
       <nav className={mobileMenuOpen ? "mobile-nav-open" : ""}>{siteConfig.navigation.map((item) => <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}{"icon" in item && item.icon === "lightbulb" && <img className="nav-lightbulb" style={{ transform: "translateY(-2px)" }} src="/images/lightbulb-idea.png" alt="" aria-hidden="true" width="18" height="18" />}</a>)}</nav>
       <Button>Comienza Gratis</Button>
       <button className="mobile-menu" type="button" aria-label="Abrir menú" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}><span /><span /><span /></button>
@@ -194,9 +194,9 @@ export default function Home() {
         <div className="button-row"><Button icon>Comenzar gratis</Button><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
         <div className="quick-points"><span><img src="/images/quick-points/publish.png" alt="" width="28" height="28" />Publica sin complicaciones</span><span><img src="/images/quick-points/clock.png" alt="" width="28" height="28" />Ahorra horas de trabajo manual</span><span><img src="/images/quick-points/language.png" alt="" width="28" height="28" />Gestiona tu cuenta con lenguaje natural</span></div>
       </div>
-      <div className="hero-visual" aria-label="Ejemplo de una conversación con MercadoChat">
+      <div className="hero-visual" aria-label={`Ejemplo de una conversación con ${siteConfig.name}`}>
         <div className="chat-window">
-          <div className="chat-header"><strong>MercadoChat</strong><span><i />En línea</span></div>
+          <div className="chat-header"><strong>{siteConfig.name}</strong><span><i />En línea</span></div>
           <div className="chat-body">
             <div className="chat-message chat-message-user">¿Cuáles son mis productos más vendidos<br />en los últimos 30 días?<small>10:32 <b><HeroIcon name="double-check" size={15} /></b></small></div>
             <div className="chat-message chat-message-assistant">Aquí tienes tus productos más vendidos<br />en los últimos 30 días.<small>10:32</small></div>
@@ -205,13 +205,13 @@ export default function Home() {
               {[['Auriculares Bluetooth Inalámbricos','47','S/ 11,703'],['Cargador Rápido USB-C 20W','36','S/ 6,444'],['Soporte para Celular de Auto','29','S/ 3,741'],['Cable USB-C a Lightning 1m','24','S/ 2,136'],['Smartwatch Deportivo IP68','18','S/ 8,442']].map(([name, units, total]) => <div className="sales-table-row" key={name}><span>{name}</span><span>{units}</span><span>{total}</span></div>)}
             </div>
             <div className="chat-input">Escribí tu mensaje... <b><HeroIcon name="send" size={20} /></b></div>
-            <p className="chat-disclaimer">MercadoChat puede cometer errores. Verificá siempre la información importante.</p>
+            <p className="chat-disclaimer">{siteConfig.name} puede cometer errores. Verificá siempre la información importante.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section className="showcase shell"><SectionTitle>Mira lo que puedes lograr en segundos</SectionTitle><div ref={showcaseRef} className={`showcase-carousel ${isDraggingShowcase ? "is-dragging" : ""}`} aria-label="Ejemplos de conversaciones y resultados en MercadoChat" onPointerDown={startShowcaseDrag} onPointerMove={dragShowcase} onPointerUp={stopShowcaseDrag} onPointerCancel={stopShowcaseDrag} onTouchStart={startShowcaseTouch} onTouchMove={moveShowcaseTouch} onTouchEnd={stopShowcaseTouch} onTouchCancel={stopShowcaseTouch} onScroll={(event) => { const loopWidth = event.currentTarget.scrollWidth / 2; setActiveShowcasePage(Math.min(showcasePages - 1, Math.floor((event.currentTarget.scrollLeft % loopWidth) / (loopWidth / showcasePages)))); }}><div className="carousel"><ShowcaseCards /><ShowcaseCards duplicate /></div></div><div className="dots" aria-label="Navegación de ejemplos">{Array.from({ length: showcasePages }, (_, index) => <button key={index} className={activeShowcasePage === index ? "active" : ""} onClick={() => moveShowcase(index)} aria-label={`Ver ejemplos ${index + 1}`} aria-current={activeShowcasePage === index} />)}</div></section>
+    <section className="showcase shell"><SectionTitle>Mira lo que puedes lograr en segundos</SectionTitle><div ref={showcaseRef} className={`showcase-carousel ${isDraggingShowcase ? "is-dragging" : ""}`} aria-label={`Ejemplos de conversaciones y resultados en ${siteConfig.name}`} onPointerDown={startShowcaseDrag} onPointerMove={dragShowcase} onPointerUp={stopShowcaseDrag} onPointerCancel={stopShowcaseDrag} onTouchStart={startShowcaseTouch} onTouchMove={moveShowcaseTouch} onTouchEnd={stopShowcaseTouch} onTouchCancel={stopShowcaseTouch} onScroll={(event) => { const loopWidth = event.currentTarget.scrollWidth / 2; setActiveShowcasePage(Math.min(showcasePages - 1, Math.floor((event.currentTarget.scrollLeft % loopWidth) / (loopWidth / showcasePages)))); }}><div className="carousel"><ShowcaseCards /><ShowcaseCards duplicate /></div></div><div className="dots" aria-label="Navegación de ejemplos">{Array.from({ length: showcasePages }, (_, index) => <button key={index} className={activeShowcasePage === index ? "active" : ""} onClick={() => moveShowcase(index)} aria-label={`Ver ejemplos ${index + 1}`} aria-current={activeShowcasePage === index} />)}</div></section>
 
     <section id="funciones" className="features shell"><SectionTitle>Todo lo que necesitas en un solo asistente</SectionTitle><div>{landing.features.map(([icon, title, items]) => <article key={title}><span className="feature-icon"><img src={icon} alt="" width="96" height="96" /></span><h3>{title}</h3><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></section>
 
@@ -223,7 +223,7 @@ export default function Home() {
 
     <section id="faq" className="faq shell"><SectionTitle>Preguntas frecuentes</SectionTitle><div className="faq-grid">{landing.faqs.map(([question, answer], index) => <article key={question}><button onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}>{question}<span>{openFaq === index ? '−' : '+'}</span></button>{openFaq === index && <p>{answer}</p>}</article>)}</div></section>
 
-    <section className="closing shell"><div><h2>Convierte tu cuenta de Mercado Libre en una herramienta <em>que puedes consultar con IA.</em></h2><p>Solicita una demostración y descubre cómo reducir el trabajo manual de tu operación desde hoy.</p><Button>Solicitar demostración por WhatsApp</Button><small>Respuesta rápida · Sin compromiso</small></div><div className="device-scene"><div className="laptop"><div className="screen"><b>MercadoChat</b><strong>S/ 24,560.00</strong><div className="mini-line" /></div></div><div className="phone"><b>Ventas</b><span>S/ 3,842</span></div><i /><i /></div></section>
-    <footer className="shell"><img className="footer-brand" src="/brand/mercadochat-logo.png" alt="MercadoChat" width="220" height="60" />© {new Date().getFullYear()} {siteConfig.name}. IA para vendedores de Mercado Libre.</footer>
+    <section className="closing shell"><div><h2>Convierte tu cuenta de Mercado Libre en una herramienta <em>que puedes consultar con IA.</em></h2><p>Solicita una demostración y descubre cómo reducir el trabajo manual de tu operación desde hoy.</p><Button>Solicitar demostración por WhatsApp</Button><small>Respuesta rápida · Sin compromiso</small></div><div className="device-scene"><div className="laptop"><div className="screen"><b>{siteConfig.name}</b><strong>S/ 24,560.00</strong><div className="mini-line" /></div></div><div className="phone"><b>Ventas</b><span>S/ 3,842</span></div><i /><i /></div></section>
+    <footer className="shell"><img className="footer-brand" src={siteConfig.brand.logo} alt={siteConfig.name} width="280" height="90" />© {new Date().getFullYear()} {siteConfig.name}. IA para vendedores de Mercado Libre.</footer>
   </main>;
 }
