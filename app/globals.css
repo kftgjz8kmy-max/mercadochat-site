@@ -143,8 +143,8 @@ main { padding-top:82px; }
 @media(max-width:640px){
   .shell,.faq{width:min(calc(100% - 40px),1080px)}
   .header{gap:16px}
-  .brand{width:190px;height:58px;min-width:0}
-  .brand-logo-full{display:block;width:190px;height:58px;object-fit:contain;object-position:left center}
+  .brand{width:189px;height:57px;min-width:0}
+  .brand-logo-full{display:block;width:189px;height:57px;object-fit:contain;object-position:left center}
   .brand-logo-icon{display:none}
   main:before{height:0}
   .hero{gap:32px;padding-bottom:24px}
