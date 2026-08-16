@@ -15,10 +15,13 @@ test("uses the Vercel-compatible Next.js runtime", async () => {
   assert.match(packageJson, /"next": "\^16\.2\.6"/);
   assert.match(packageJson, /"build": "next build"/);
   assert.doesNotMatch(packageJson, /"build": ".*vinext build"/);
-  assert.match(site, /name: "MerChat"/);
+  assert.match(site, /name: "merchat"/);
   assert.doesNotMatch(page, new RegExp(["Mercado", "Chat"].join("")));
   assert.match(page, /Mercado Libre/);
   assert.match(layout, /export const metadata: Metadata/);
+  assert.match(layout, /icon: siteConfig\.brand\.icon/);
+  assert.match(page, /src=\{siteConfig\.brand\.logo\}/);
+  assert.doesNotMatch(`${site}\n${layout}\n${page}`, /MercadoChat|mercadochat-(logo|icon)/i);
 });
 
 test("does not retain the disposable Sites preview scaffold", async () => {
@@ -37,14 +40,14 @@ test("does not retain the disposable Sites preview scaffold", async () => {
   );
 });
 
-test("uses the MerChat brand assets without retaining the old public paths", async () => {
+test("uses the merchat brand assets without retaining the old public paths", async () => {
   const [site, layout, page] = await Promise.all([
     readFile(new URL("../config/site.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
   ]);
 
-  assert.match(site, /name: "MerChat"/);
+  assert.match(site, /name: "merchat"/);
   assert.match(site, /\/brand\/merchat-logo\.png/);
   assert.match(site, /\/brand\/merchat-icon\.png/);
   const previousAssetPrefix = ["mercado", "chat"].join("");
@@ -54,4 +57,8 @@ test("uses the MerChat brand assets without retaining the old public paths", asy
     access(new URL("../public/brand/merchat-logo.png", import.meta.url)),
     access(new URL("../public/brand/merchat-icon.png", import.meta.url)),
   ]);
+
+  await assert.rejects(
+    access(new URL("../public/favicon.svg", import.meta.url)),
+  );
 });
