@@ -174,7 +174,7 @@ export default function Home() {
   };
   return <main>
     <header className="header shell">
-      <a href="#inicio" className="brand" aria-label={siteConfig.name}><img className="brand-logo-full" src={siteConfig.brand.logo} alt={siteConfig.name} width="241" height="71" /><img className="brand-logo-icon" src={siteConfig.brand.icon} alt="" width="48" height="48" /></a>
+      <a href="#inicio" className="brand" aria-label={siteConfig.name}><img className="brand-logo-full" src={siteConfig.brand.logo} alt={siteConfig.name} width="190" height="56" /><img className="brand-logo-icon" src={siteConfig.brand.icon} alt="" width="48" height="48" /></a>
       <nav className={mobileMenuOpen ? "mobile-nav-open" : ""}>{siteConfig.navigation.map((item) => <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}{"icon" in item && item.icon === "lightbulb" && <img className="nav-lightbulb" style={{ transform: "translateY(-2px)" }} src="/images/lightbulb-idea.png" alt="" aria-hidden="true" width="18" height="18" />}</a>)}</nav>
       <Button>Comienza Gratis</Button>
       <button className="mobile-menu" type="button" aria-label="Abrir menú" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}><span /><span /><span /></button>
