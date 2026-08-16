@@ -14,9 +14,9 @@ export const metadata: Metadata = {
   title: `${siteConfig.name} | IA para vendedores de Mercado Libre`,
   description: siteConfig.description,
   icons: {
-    icon: "/brand/mercadochat-icon.png",
-    shortcut: "/brand/mercadochat-icon.png",
-    apple: "/brand/mercadochat-icon.png",
+    icon: siteConfig.brand.icon,
+    shortcut: siteConfig.brand.icon,
+    apple: siteConfig.brand.icon,
   },
 };
 

@@ -1,6 +1,6 @@
-# MercadoChat landing page
+# MerChat landing page
 
-Single-page marketing site for **MercadoChat**, built with Vinext, React,
+Single-page marketing site for **MerChat**, built with Vinext, React,
 TypeScript, Tailwind CSS, and the App Router.
 
 ## Rebrand and content
