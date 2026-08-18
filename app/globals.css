@@ -143,9 +143,9 @@ main { padding-top:82px; }
 @media(max-width:640px){
   .shell,.faq{width:min(calc(100% - 40px),1080px)}
   .header{gap:16px}
-  .brand{width:189px;height:57px;min-width:0}
-  .brand-logo-full{display:block;width:189px;height:57px;object-fit:contain;object-position:left bottom}
-  .brand-logo-full{transform:translateY(-5px)}
+  .brand{width:163px;height:49px;min-width:0}
+  .brand-logo-full{display:block;width:163px;height:49px;object-fit:contain;object-position:left bottom}
+  .brand-logo-full{transform:translateY(-9px)}
   .brand-logo-icon{display:none}
   main:before{height:0}
   .hero{gap:32px;padding-bottom:24px}
