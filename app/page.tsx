@@ -191,7 +191,7 @@ export default function Home() {
         <p className="eyebrow"><HeroIcon name="sparkle" size={16} />{landing.hero.eyebrow}</p>
         <h1>Gestiona Mercado Libre hablando con una IA que <em>entiende tu negocio.</em></h1>
         <p className="hero-description">{landing.hero.description}</p>
-        <div className="button-row"><Button icon>Comenzar gratis</Button><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
+        <div className="button-row"><Button icon href={siteConfig.trialUrl}>Comenzar gratis</Button><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
         <div className="quick-points"><span><img src="/images/quick-points/publish.png" alt="" width="28" height="28" />Publica sin complicaciones</span><span><img src="/images/quick-points/clock.png" alt="" width="28" height="28" />Ahorra horas de trabajo manual</span><span><img src="/images/quick-points/language.png" alt="" width="28" height="28" />Gestiona tu cuenta con lenguaje natural</span></div>
       </div>
       <div className="hero-visual" aria-label={`Ejemplo de una conversación con ${siteConfig.name}`}>
