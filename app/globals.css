@@ -171,7 +171,7 @@ main { padding-top:82px; }
   font-size:13px;
   font-weight:600;
   line-height:1;
-  transition:none;
+  transition:background .2s ease,transform .2s ease,box-shadow .2s ease;
   background:
     linear-gradient(112deg,#1D4ED8 0%,#3148E4 48%,#7C3AED 100%) padding-box,
     linear-gradient(110deg,#6EA6FF 0%,#8AB0FF 44%,#6D57FF 100%) border-box;
@@ -180,10 +180,25 @@ main { padding-top:82px; }
 }
 
 .header .button:hover {
-  transform:none;
+  transform:translateY(-1px);
+  background:
+    linear-gradient(112deg,#2563EB 0%,#4056EA 48%,#8B5CF6 100%) padding-box,
+    linear-gradient(110deg,#8CB9FF 0%,#A6BEFF 44%,#8977FF 100%) border-box;
+  background-size:100% 100%;
+  box-shadow:0 14px 30px rgb(62 79 193 / 30%),0 0 0 1px rgb(137 166 255 / 38%);
+}
+
+.hero .button:not(.button-outline) {
+  border-color:transparent;
   background:
     linear-gradient(112deg,#1D4ED8 0%,#3148E4 48%,#7C3AED 100%) padding-box,
     linear-gradient(110deg,#6EA6FF 0%,#8AB0FF 44%,#6D57FF 100%) border-box;
-  background-size:100% 100%;
   box-shadow:0 10px 26px rgb(62 79 193 / 22%),0 0 0 1px rgb(112 147 255 / 24%);
+}
+
+.hero .button:not(.button-outline):hover {
+  background:
+    linear-gradient(112deg,#2563EB 0%,#4056EA 48%,#8B5CF6 100%) padding-box,
+    linear-gradient(110deg,#8CB9FF 0%,#A6BEFF 44%,#8977FF 100%) border-box;
+  box-shadow:0 14px 30px rgb(62 79 193 / 30%),0 0 0 1px rgb(137 166 255 / 38%);
 }
