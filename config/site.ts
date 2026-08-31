@@ -8,10 +8,11 @@ export const siteConfig = {
     icon: "/brand/merchat-icon.png",
   },
   navigation: [
+    { label: "Cómo funciona", href: "#como-funciona" },
     { label: "Funciones", href: "#funciones" },
     { label: "Planes", href: "#planes" },
     { label: "Seguridad", href: "#seguridad" },
     { label: "FAQ", href: "#faq" },
-    { label: "IA para tu negocio?", href: "#inicio", icon: "lightbulb" },
+    { label: "Soluciones IA", href: "#ia-negocios", icon: "lightbulb" },
   ],
 } as const;
