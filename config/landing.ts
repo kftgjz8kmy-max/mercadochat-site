@@ -33,15 +33,16 @@ export const landing = {
     { eyebrow: "Convierte datos en acción", image: "/images/lifestyle/sales-analysis.png", alt: "Equipo de ecommerce analizando el rendimiento de sus ventas", note: "Detecta oportunidades para crecer con claridad." },
   ],
   features: [
-    ["/images/feature-icons/publishing.svg", "Publica en minutos", ["Crea una publicación conversando", "Publica desde una foto", "Completa y verifica datos técnicos"]],
-    ["/images/feature-icons/market-research.svg", "Aumenta tu margen", ["Compara tus precios", "Calcula descuentos", "Crea promociones", "Agrega productos a promociones"]],
-    ["/images/feature-icons/order-management.svg", "Ten todo bajo control", ["Calcula ganancias en Excel", "Actualiza precios y stock", "Consulta tu última venta", "Identifica los más y menos vendidos"]],
-    ["/images/feature-icons/sales-insights.svg", "Haz crecer tus ventas", ["Encuentra productos que no se venden", "Optimiza publicaciones", "Genera un diagnóstico trimestral"]],
+    ["/images/feature-icons/publishing-v3-transparent.png", "Publica en minutos", ["Crea una publicación conversando", "Publica desde una foto", "Completa y verifica datos técnicos"]],
+    ["/images/feature-icons/market-research.png", "Aumenta tu margen", ["Compara tus precios", "Calcula descuentos", "Crea promociones", "Agrega productos a promociones"]],
+    ["/images/feature-icons/order-management.png", "Ten todo bajo control", ["Calcula ganancias en Excel", "Actualiza precios y stock", "Consulta tu última venta", "Identifica los más y menos vendidos"]],
+    ["/images/feature-icons/sales-insights.png", "Haz crecer tus ventas", ["Encuentra productos que no se venden", "Optimiza publicaciones", "Genera un diagnóstico trimestral"]],
   ],
   steps: [
-    ["1", "Conecta tu cuenta", "Autoriza tu cuenta de Mercado Libre con una conexión oficial y segura."],
-    ["2", "Haz una pregunta", "Pregunta sobre ventas, órdenes, publicaciones o productos."],
-    ["3", "Recibe información o confirma", "El asistente responde y solicita confirmación antes de cambios importantes."],
+    ["1", "Crea tu cuenta", "Regístrate en segundos y prepara tu espacio de trabajo."],
+    ["2", "Conecta Mercado Libre", "Autoriza tu cuenta y sincroniza tus datos de forma segura."],
+    ["3", "Elige dónde conversar", "Conecta merchat con ChatGPT, Claude u otra herramienta compatible."],
+    ["4", "Gestiona tu negocio", "Habla, pregunta y recibe ayuda para tomar mejores decisiones."],
   ],
   plans: [
     { name: "Vendedor", audience: "Para vendedores con una operación constante.", price: "149", prefix: "", setup: "Implementación única: S/249", featured: false, cta: "Solicitar demo", items: ["1 cuenta de Mercado Libre", "Consultas de ventas y órdenes", "Información de productos y precios", "Consulta de publicaciones propias", "Investigación básica de productos", "Creación asistida de publicaciones", "Soporte estándar"] },
