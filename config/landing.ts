@@ -51,10 +51,14 @@ export const landing = {
   ],
   trust: ["Conectas Mercado Libre mediante autorización oficial.", "Cada usuario solo accede a sus propias cuentas.", "Tus datos permanecen separados por cliente.", "Te pedimos confirmación antes de acciones importantes."],
   faqs: [
+    ["¿Qué incluye la prueba gratis?", "Incluye todo lo que viene en el plan Vendedor Pro con una cuenta de Mercado Libre."],
+    ["¿Cuándo comienza mi prueba?", "Desde la creación de la cuenta."],
+    ["¿Qué pasa cuando terminan los 14 días?", "Debes elegir un plan para seguir usando merchat."],
+    ["¿Necesito tarjeta para comenzar?", "No necesitas tarjeta para comenzar."],
     ["¿Necesito conocimientos técnicos?", "No. Solo necesitas crear tu cuenta en merchat y hacer preguntas desde ChatGPT, Claude u otra herramienta compatible."],
     ["¿El sistema puede publicar productos?", "Sí. Puede preparar la publicación y te pedirá confirmación antes de publicarla."],
     ["¿Puede modificar información sin mi permiso?", "No de forma automática: te pedirá confirmación antes de publicar o cambiar información."],
     ["¿Puedo conectar varias cuentas?", "Sí. El plan Agencia permite gestionar hasta tres cuentas y añadir más cuando lo necesites."],
-    ["¿Cómo comienzo?", "Haz clic en «Crear cuenta gratis» y sigue los pasos para conectar Mercado Libre y tu asistente de IA."],
+    ["¿Cómo comienzo?", "Haz clic en «Comienza Gratis» y sigue los pasos para conectar Mercado Libre y tu asistente de IA."],
   ],
 } as const;
