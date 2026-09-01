@@ -654,3 +654,113 @@ main > section[id] { scroll-margin-top:98px; }
     height: 96px;
   }
 }
+
+/* Unified public type hierarchy: one section-heading role, clear card
+   subheads, and readable body copy across the landing page. */
+:root {
+  --type-section-heading: clamp(40px, 4vw, 48px);
+  --type-subheading: clamp(20px, 1.75vw, 22px);
+  --type-body: 16px;
+  --type-meta: 14px;
+}
+
+.section-title,
+.steps .section-title {
+  max-width: 32ch;
+  margin: 0 auto 28px;
+  font-size: var(--type-section-heading);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.steps p.steps-intro {
+  max-width: 780px;
+  margin: 0 auto 52px;
+  font-size: 18px;
+  line-height: 1.5;
+  text-wrap: balance;
+  white-space: normal;
+}
+
+.features h3,
+.steps h3,
+.price-card h3 {
+  font-size: var(--type-subheading);
+  font-weight: 600;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.features ul,
+.steps p:not(.steps-intro),
+.trust article,
+.price-card .audience,
+.price-card>b,
+.price-card ul,
+.faq p {
+  font-size: var(--type-body);
+  line-height: 1.5;
+}
+
+.pricing-intro {
+  font-size: var(--type-meta);
+  line-height: 1.5;
+}
+
+/* The capabilities and examples sections form one continuous idea; keep
+   their handoff on the same 72px rhythm as the other section transitions. */
+.features + .showcase {
+  padding-top: 0;
+}
+
+.faq button {
+  font-size: var(--type-body);
+  line-height: 1.4;
+}
+
+.closing h2 {
+  font-size: clamp(32px, 3vw, 40px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+@media(max-width:640px) {
+  .section-title,
+  .steps .section-title {
+    max-width: 18ch;
+    margin-bottom: 24px;
+    font-size: 32px;
+    line-height: 1.1;
+  }
+
+  .steps p.steps-intro {
+    max-width: 34ch;
+    margin-bottom: 36px;
+    font-size: 17px;
+  }
+
+  .features h3,
+  .steps h3,
+  .price-card h3 {
+    font-size: 20px;
+  }
+
+  .features ul,
+  .steps p:not(.steps-intro),
+  .trust article,
+  .price-card .audience,
+  .price-card>b,
+  .price-card ul,
+  .faq p {
+    font-size: 15px;
+  }
+
+  .closing h2 {
+    font-size: 32px;
+  }
+}
