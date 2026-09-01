@@ -712,9 +712,18 @@ main > section[id] { scroll-margin-top:98px; }
 .steps .step-symbol:before { display:none; }
 .steps .step-symbol .step-icon-image { width:112px; height:112px; filter:none; }
 .steps .step-title { display:flex; align-items:center; justify-content:center; gap:12px; min-height:30px; }
-.steps .step-number { position:static; width:30px; height:30px; padding-top:6px; flex:none; border:0; font-size:14px; box-shadow:0 5px 12px rgb(37 99 235 / 20%); }
+.steps .step-number { position:absolute; top:auto; right:-25px; bottom:-25px; left:auto; z-index:2; width:30px; height:30px; padding-top:6px; border:0; border-radius:50%; background:var(--blue); color:white; font-size:14px; font-weight:750; box-shadow:0 5px 12px rgb(37 99 235 / 20%); }
 .steps h3 { min-height:0; margin:0; font-size:20px; line-height:1.2; }
-.steps p { max-width:245px; margin-top:13px; font-size:14px; line-height:1.48; }
+.steps p { max-width:245px; margin-top:8px; font-size:14px; line-height:1.48; }
+
+/* Keep each onboarding label compact beneath its icon without changing the
+   established type scale or the illustrations. */
+.steps .step-symbol { position:relative; }
+.steps .step-title { display:block; min-height:0; }
+@media(min-width:1000px){
+  .steps article:nth-child(3) { padding-inline:0; }
+  .steps article:nth-child(3) h3 { white-space:nowrap; }
+}
 @media(max-width:720px){
   .steps { padding-top:64px; }
   .steps-intro { margin-bottom:46px; }
@@ -729,6 +738,7 @@ main > section[id] { scroll-margin-top:98px; }
   .steps .step-symbol, .steps .step-symbol .step-icon-image { width:132px; height:132px; }
   .steps .step-title { gap:10px; }
   .steps h3 { font-size:19px; }
+  .steps h3 { min-height:0; }
   .steps p { max-width:275px; font-size:14px; }
 }
 
