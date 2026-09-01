@@ -4,7 +4,7 @@ export type UseCaseCard = { id: string; category: string; prompt: string; result
 
 export const landing = {
   hero: {
-    eyebrow: "Asistente IA para Mercado Libre",
+    eyebrow: "Asistente de IA para Mercado Libre",
     description:
       "Empieza a vender, mejora tus publicaciones y entiende tus ganancias con un asistente que trabaja por ti.",
   },
@@ -33,27 +33,28 @@ export const landing = {
     { eyebrow: "Convierte datos en acción", image: "/images/lifestyle/sales-analysis.png", alt: "Equipo de ecommerce analizando el rendimiento de sus ventas", note: "Detecta oportunidades para crecer con claridad." },
   ],
   features: [
-    ["/images/feature-icons/publishing.svg", "Publica en minutos", ["Crea una publicación conversando", "Publica desde una foto", "Completa y verifica datos técnicos"]],
-    ["/images/feature-icons/market-research.svg", "Aumenta tu margen", ["Compara tus precios", "Calcula descuentos", "Crea promociones", "Agrega productos a promociones"]],
-    ["/images/feature-icons/order-management.svg", "Ten todo bajo control", ["Calcula ganancias en Excel", "Actualiza precios y stock", "Consulta tu última venta", "Identifica los más y menos vendidos"]],
-    ["/images/feature-icons/sales-insights.svg", "Haz crecer tus ventas", ["Encuentra productos que no se venden", "Optimiza publicaciones", "Genera un diagnóstico trimestral"]],
+    ["/images/feature-icons/publishing-v3-transparent.png", "Publica en minutos", ["Crea una publicación conversando", "Publica desde una foto", "Completa y verifica datos técnicos"]],
+    ["/images/feature-icons/market-research.png", "Mejora tus precios", ["Compara tus precios", "Calcula descuentos", "Crea promociones", "Agrega productos a promociones"]],
+    ["/images/feature-icons/order-management.png", "Controla tu operación", ["Calcula ganancias en Excel", "Actualiza precios y stock", "Consulta tus últimas ventas", "Identifica los más y menos vendidos"]],
+    ["/images/feature-icons/sales-insights.png", "Analiza tus ventas", ["Encuentra productos que no se venden", "Optimiza publicaciones", "Genera un diagnóstico trimestral"]],
   ],
   steps: [
-    ["1", "Conecta tu cuenta", "Autoriza tu cuenta de Mercado Libre con una conexión oficial y segura."],
-    ["2", "Haz una pregunta", "Pregunta sobre ventas, órdenes, publicaciones o productos."],
-    ["3", "Recibe información o confirma", "El asistente responde y solicita confirmación antes de cambios importantes."],
+    ["1", "Crea tu cuenta gratis", "Regístrate y prepara tu espacio de trabajo."],
+    ["2", "Conecta Mercado Libre", "Autoriza el acceso para consultar tus productos, publicaciones y ventas."],
+    ["3", "Instala tu asistente merchat", "Conéctalo con ChatGPT, Claude u otra herramienta compatible."],
+    ["4", "Gestiona tu negocio", "Pregunta, publica y gestiona tu operación desde una conversación."],
   ],
   plans: [
-    { name: "Vendedor", audience: "Para vendedores con una operación constante.", price: "149", prefix: "", setup: "Implementación única: S/249", featured: false, cta: "Solicitar demo", items: ["1 cuenta de Mercado Libre", "Consultas de ventas y órdenes", "Información de productos y precios", "Consulta de publicaciones propias", "Investigación básica de productos", "Creación asistida de publicaciones", "Soporte estándar"] },
-    { name: "Vendedor Pro", audience: "Para vendedores fuertes y tiendas con mayor volumen.", price: "299", prefix: "", setup: "Implementación única: S/499", featured: true, cta: "Elegir Vendedor Pro", items: ["Todo lo del plan Vendedor", "Mayor volumen de consultas", "Investigación frecuente de productos", "Comparación de publicaciones", "Uso recurrente para crear publicaciones", "Configuración personalizada para tu tienda", "Capacitación inicial", "Soporte prioritario", "Revisión mensual de funcionamiento"] },
-    { name: "Agencia", audience: "Para agencias y operadores que administran varias cuentas.", price: "749", prefix: "Desde ", setup: "Implementación desde: S/1,200", featured: false, cta: "Hablar sobre mi agencia", items: ["Hasta 3 cuentas de Mercado Libre", "Separación de información por cliente", "Consultas y acciones por cliente", "Configuración independiente por cuenta", "Capacitación para el equipo", "Incorporación asistida de cuentas", "Cuenta adicional: S/150/mes", "Soporte prioritario"] },
+    { name: "Vendedor", audience: "Para una cuenta y consultas habituales.", price: "149", prefix: "", setup: "Implementación única: S/249", featured: false, cta: "Crear cuenta gratis", items: ["1 cuenta de Mercado Libre", "Consultas de ventas y órdenes", "Información de productos y precios", "Consulta de publicaciones propias", "Investigación básica de productos", "Creación asistida de publicaciones", "Soporte estándar"] },
+    { name: "Vendedor Pro", audience: "Para mayor volumen y configuración personalizada.", price: "299", prefix: "", setup: "Implementación única: S/499", featured: true, cta: "Elegir Vendedor Pro", items: ["Todo lo del plan Vendedor", "Mayor volumen de consultas", "Investigación frecuente de productos", "Comparación de publicaciones", "Uso recurrente para crear publicaciones", "Configuración personalizada para tu tienda", "Capacitación inicial", "Soporte prioritario", "Revisión mensual de funcionamiento"] },
+    { name: "Agencia", audience: "Para equipos que administran varias cuentas.", price: "749", prefix: "Desde ", setup: "Implementación desde: S/1,200", featured: false, cta: "Hablar sobre mi agencia", items: ["Hasta 3 cuentas de Mercado Libre", "Separación de información por cliente", "Consultas y acciones por cliente", "Configuración independiente por cuenta", "Capacitación para el equipo", "Incorporación asistida de cuentas", "Cuenta adicional: S/150/mes", "Soporte prioritario"] },
   ],
-  trust: ["Conexión oficial mediante autorización de Mercado Libre.", "Cada usuario solo accede a sus propias cuentas.", "Separación de datos entre clientes.", "Confirmación antes de acciones importantes."],
+  trust: ["Conectas Mercado Libre mediante autorización oficial.", "Cada usuario solo accede a sus propias cuentas.", "Tus datos permanecen separados por cliente.", "Te pedimos confirmación antes de acciones importantes."],
   faqs: [
-    ["¿Necesito conocimientos técnicos?", "No. Puedes hacer preguntas como lo harías a una persona de tu equipo."],
-    ["¿El sistema puede publicar productos?", "Puede preparar publicaciones y siempre te pide confirmación antes de realizar cambios."],
-    ["¿Puede modificar información sin mi permiso?", "No. Las acciones relevantes requieren una confirmación previa."],
+    ["¿Necesito conocimientos técnicos?", "No. Solo necesitas crear tu cuenta en merchat y hacer preguntas desde ChatGPT, Claude u otra herramienta compatible."],
+    ["¿El sistema puede publicar productos?", "Sí. Puede preparar la publicación y te pedirá confirmación antes de publicarla."],
+    ["¿Puede modificar información sin mi permiso?", "No de forma automática: te pedirá confirmación antes de publicar o cambiar información."],
     ["¿Puedo conectar varias cuentas?", "Sí. El plan Agencia permite gestionar hasta tres cuentas y añadir más cuando lo necesites."],
-    ["¿Cómo comienzo?", "Solicita una demostración y revisaremos tu operación para recomendarte el mejor punto de partida."],
+    ["¿Cómo comienzo?", "Haz clic en «Crear cuenta gratis» y sigue los pasos para conectar Mercado Libre y tu asistente de IA."],
   ],
 } as const;
