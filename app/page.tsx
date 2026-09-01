@@ -25,8 +25,9 @@ function Button({ children, outline = false, href = siteConfig.whatsappUrl, icon
   return <a className={`button ${outline ? "button-outline" : ""}`} href={href}>{children}{icon && <HeroIcon name="arrow" size={17} />}</a>;
 }
 
-function SectionTitle({ children, id }: { children: React.ReactNode; id?: string }) {
-  return <h2 id={id} className="section-title">{children}</h2>;
+function SectionTitle({ children, id, level = "h2" }: { children: React.ReactNode; id?: string; level?: "h2" | "h3" }) {
+  const Heading = level;
+  return <Heading id={id} className="section-title">{children}</Heading>;
 }
 
 const stepIconSources = [
@@ -230,9 +231,11 @@ export default function Home() {
 
     <section id="como-funciona" className="steps shell"><SectionTitle>Cómo funciona</SectionTitle><p className="steps-intro">Conecta, elige tu asistente y lleva tu negocio al siguiente nivel con conversaciones.</p><div>{landing.steps.map(([number, title, description], i) => <article key={number}><div className="step-symbol"><StepIcon step={i} /></div><div className="step-title"><span className="step-number">{number}</span><h3>{title}</h3></div><p>{description}</p></article>)}</div></section>
 
-    <section id="funciones" className="features shell"><SectionTitle>Lo que puedes hacer con merchat</SectionTitle><div>{landing.features.map(([icon, title, items]) => <article key={title}><span className="feature-icon"><img src={icon} alt="" width="96" height="96" /></span><h3>{title}</h3><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></section>
+    <section id="funciones" className="functions-group">
+      <section className="features shell"><SectionTitle>Lo que puedes hacer con merchat</SectionTitle><div>{landing.features.map(([icon, title, items]) => <article key={title}><span className="feature-icon"><img src={icon} alt="" width="96" height="96" /></span><h3>{title}</h3><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></section>
 
-    <section id="resultados" className="showcase shell"><SectionTitle>Pídele a merchat lo que necesitas</SectionTitle><div ref={showcaseRef} className={`showcase-carousel ${isDraggingShowcase ? "is-dragging" : ""}`} aria-label={`Ejemplos de conversaciones y resultados en ${siteConfig.name}`} onPointerDown={startShowcaseDrag} onPointerMove={dragShowcase} onPointerUp={stopShowcaseDrag} onPointerCancel={stopShowcaseDrag} onTouchStart={startShowcaseTouch} onTouchMove={moveShowcaseTouch} onTouchEnd={stopShowcaseTouch} onTouchCancel={stopShowcaseTouch} onScroll={(event) => { const loopWidth = event.currentTarget.scrollWidth / 2; setActiveShowcasePage(Math.min(showcasePages - 1, Math.floor((event.currentTarget.scrollLeft % loopWidth) / (loopWidth / showcasePages)))); }}><div className="carousel"><ShowcaseCards /><ShowcaseCards duplicate /></div></div><div className="dots" aria-label="Navegación de ejemplos">{Array.from({ length: showcasePages }, (_, index) => <button key={index} className={activeShowcasePage === index ? "active" : ""} onClick={() => moveShowcase(index)} aria-label={`Ver ejemplos ${index + 1}`} aria-current={activeShowcasePage === index} />)}</div></section>
+      <section id="resultados" className="showcase shell"><SectionTitle level="h3">Pídele a merchat lo que necesitas</SectionTitle><div ref={showcaseRef} className={`showcase-carousel ${isDraggingShowcase ? "is-dragging" : ""}`} aria-label={`Ejemplos de conversaciones y resultados en ${siteConfig.name}`} onPointerDown={startShowcaseDrag} onPointerMove={dragShowcase} onPointerUp={stopShowcaseDrag} onPointerCancel={stopShowcaseDrag} onTouchStart={startShowcaseTouch} onTouchMove={moveShowcaseTouch} onTouchEnd={stopShowcaseTouch} onTouchCancel={stopShowcaseTouch} onScroll={(event) => { const loopWidth = event.currentTarget.scrollWidth / 2; setActiveShowcasePage(Math.min(showcasePages - 1, Math.floor((event.currentTarget.scrollLeft % loopWidth) / (loopWidth / showcasePages)))); }}><div className="carousel"><ShowcaseCards /><ShowcaseCards duplicate /></div></div><div className="dots" aria-label="Navegación de ejemplos">{Array.from({ length: showcasePages }, (_, index) => <button key={index} className={activeShowcasePage === index ? "active" : ""} onClick={() => moveShowcase(index)} aria-label={`Ver ejemplos ${index + 1}`} aria-current={activeShowcasePage === index} />)}</div></section>
+    </section>
 
     <section id="seguridad" className="trust shell"><SectionTitle>Tu cuenta y tus datos permanecen protegidos</SectionTitle><div>{landing.trust.map((item, i) => <article key={item}><span className="trust-icon"><img src={trustIconSources[i] ?? trustIconSources[0]} alt="" width="48" height="48" /></span>{item}</article>)}</div></section>
 
