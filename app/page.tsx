@@ -83,7 +83,6 @@ function ShowcaseCards({ duplicate = false }: { duplicate?: boolean }) {
 }
 
 export default function Home() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeShowcasePage, setActiveShowcasePage] = useState(0);
   const showcaseRef = useRef<HTMLDivElement>(null);
@@ -194,7 +193,7 @@ export default function Home() {
     <header className="header shell">
       <a href="#inicio" className="brand" aria-label={siteConfig.name}><img className="brand-logo-full" src={siteConfig.brand.logo} alt={siteConfig.name} width="190" height="56" /><img className="brand-logo-icon" src={siteConfig.brand.icon} alt="" width="48" height="48" /></a>
       <nav className={mobileMenuOpen ? "mobile-nav-open" : ""}>{siteConfig.navigation.map((item) => <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}{"icon" in item && item.icon === "lightbulb" && <img className="nav-lightbulb" style={{ transform: "translateY(-2px)" }} src="/images/lightbulb-idea.png" alt="" aria-hidden="true" width="18" height="18" />}</a>)}</nav>
-      <Button href={siteConfig.trialUrl}>Crear cuenta gratis</Button>
+      <Button href={siteConfig.trialUrl}>Comienza Gratis</Button>
       <button className="mobile-menu" type="button" aria-label="Abrir menú" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}><span /><span /><span /></button>
     </header>
 
@@ -209,7 +208,7 @@ export default function Home() {
         <p className="eyebrow"><HeroIcon name="sparkle" size={16} />{landing.hero.eyebrow}</p>
         <h1>Gestiona Mercado Libre hablando con una IA que <em>entiende tu negocio.</em></h1>
         <p className="hero-description">{landing.hero.description}</p>
-        <div className="button-row"><Button icon href={siteConfig.trialUrl}>Crear cuenta gratis</Button><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
+        <div className="button-row"><div className="primary-cta"><Button icon href={siteConfig.trialUrl}>Comienza Gratis</Button><p className="trial-note">14 días gratis <span aria-hidden="true">-</span> Sin tarjeta</p></div><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
         <div className="quick-points"><span><img src="/images/quick-points/publish.png" alt="" width="28" height="28" />Publica sin complicaciones</span><span><img src="/images/quick-points/clock.png" alt="" width="28" height="28" />Ahorra horas de trabajo manual</span><span><img src="/images/quick-points/language.png" alt="" width="28" height="28" />Gestiona tu cuenta con lenguaje natural</span></div>
       </div>
       <div className="hero-visual" aria-label={`Ejemplo de una conversación con ${siteConfig.name}`}>
@@ -239,9 +238,9 @@ export default function Home() {
 
     <section id="seguridad" className="trust shell"><SectionTitle>Tu cuenta y tus datos permanecen protegidos</SectionTitle><div>{landing.trust.map((item, i) => <article key={item}><span className="trust-icon"><img src={trustIconSources[i] ?? trustIconSources[0]} alt="" width="48" height="48" /></span>{item}</article>)}</div></section>
 
-    <section id="planes" className="pricing shell"><SectionTitle>Planes para cada tipo de operación</SectionTitle><p className="pricing-intro">Compara qué incluye cada plan, su implementación y soporte.</p><div className="pricing-grid">{landing.plans.map((plan) => <article className={`price-card ${plan.featured ? 'featured' : ''}`} key={plan.name}>{plan.featured && <span className="popular">MÁS POPULAR</span>}<p className="plan-icon"><img src={planIconSources[plan.name] ?? planIconSources.Vendedor} alt="" width="56" height="56" /></p><h3>{plan.name}</h3><p className="audience">{plan.audience}</p><p className="price"><small>{plan.prefix}</small>S/{plan.price}<small> /mes</small></p><p className="setup">{plan.setup}</p><b>{plan.name === 'Vendedor' ? 'Incluye:' : `Incluye todo lo del plan ${plan.name === 'Vendedor Pro' ? 'Vendedor, más:' : 'Vendedor Pro, más:'}`}</b><ul>{plan.items.map((item) => <li key={item}>✓ {item}</li>)}</ul><Button outline={!plan.featured} href={plan.name === "Vendedor" ? siteConfig.trialUrl : siteConfig.whatsappUrl}>{plan.name === "Vendedor" ? "Crear cuenta gratis" : plan.cta}</Button></article>)}</div></section>
+    <section id="planes" className="pricing shell"><SectionTitle>Planes para cada tipo de operación</SectionTitle><p className="pricing-intro">Empieza gratis. Elige tu plan cuando estés listo.<br />Prueba merchat durante 14 días y conoce todo lo que puede hacer por tu operación antes de decidir cómo continuar.</p><div className="pricing-grid">{landing.plans.map((plan) => <article className={`price-card ${plan.featured ? 'featured' : ''}`} key={plan.name}>{plan.featured && <span className="popular">MÁS POPULAR</span>}<p className="plan-icon"><img src={planIconSources[plan.name] ?? planIconSources.Vendedor} alt="" width="56" height="56" /></p><h3>{plan.name}</h3><p className="audience">{plan.audience}</p><p className="price"><small>{plan.prefix}</small>S/{plan.price}<small> /mes</small></p><p className="setup">{plan.setup}</p><b>{plan.name === 'Vendedor' ? 'Incluye:' : `Incluye todo lo del plan ${plan.name === 'Vendedor Pro' ? 'Vendedor, más:' : 'Vendedor Pro, más:'}`}</b><ul>{plan.items.map((item) => <li key={item}>✓ {item}</li>)}</ul><Button outline={!plan.featured} href={plan.name === "Vendedor" ? siteConfig.trialUrl : siteConfig.whatsappUrl}>{plan.name === "Vendedor" ? "Crear cuenta gratis" : plan.cta}</Button></article>)}</div></section>
 
-    <section id="faq" className="faq shell"><SectionTitle>Preguntas frecuentes</SectionTitle><div className="faq-grid">{landing.faqs.map(([question, answer], index) => <article key={question}><button onClick={() => setOpenFaq(openFaq === index ? null : index)} aria-expanded={openFaq === index}>{question}<span>{openFaq === index ? '−' : '+'}</span></button>{openFaq === index && <p>{answer}</p>}</article>)}</div></section>
+    <section id="faq" className="faq shell"><SectionTitle>Preguntas frecuentes</SectionTitle><div className="faq-grid">{landing.faqs.map(([question, answer]) => <article key={question}><details><summary><span>{question}</span><span className="faq-toggle" aria-hidden="true" /></summary><p>{answer}</p></details></article>)}</div></section>
 
     <section id="ia-negocios" className="closing shell"><div><h2>¿Necesitas una <em>solución de IA para tu empresa?</em></h2><p>Diseñamos asistentes, automatizaciones y herramientas inteligentes para reducir trabajo manual y mejorar la forma en que trabaja tu equipo.</p><Button>Cuéntanos qué quieres automatizar</Button><small>Asistentes IA · Automatizaciones · Herramientas internas</small></div><div className="device-scene"><div className="laptop"><div className="screen"><b>{siteConfig.name}</b><strong>IA a medida</strong><div className="mini-line" /></div></div><div className="phone"><b>Proyectos</b><span>Activos</span></div><i /><i /></div></section>
     <footer className="shell"><img className="footer-brand" src={siteConfig.brand.logo} alt={siteConfig.name} width="280" height="90" />© {new Date().getFullYear()} {siteConfig.name}. IA para vendedores y empresas.</footer>
