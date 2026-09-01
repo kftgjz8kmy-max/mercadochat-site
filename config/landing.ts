@@ -39,7 +39,7 @@ export const landing = {
     ["/images/feature-icons/sales-insights.png", "Analiza tus ventas", ["Encuentra productos que no se venden", "Optimiza publicaciones", "Genera un diagnóstico trimestral"]],
   ],
   steps: [
-    ["1", "Crea tu cuenta gratis", "Regístrate y prepara tu espacio de trabajo."],
+    ["1", "Crea tu cuenta", "Regístrate y prepara tu espacio de trabajo."],
     ["2", "Conecta Mercado Libre", "Autoriza el acceso para consultar tus productos, publicaciones y ventas."],
     ["3", "Instala tu asistente merchat", "Conéctalo con ChatGPT, Claude u otra herramienta compatible."],
     ["4", "Gestiona tu negocio", "Pregunta, publica y gestiona tu operación desde una conversación."],

@@ -228,7 +228,7 @@ export default function Home() {
       </div>
     </section>
 
-    <section id="como-funciona" className="steps shell"><SectionTitle>Cómo funciona</SectionTitle><p className="steps-intro">Crea tu cuenta, conecta Mercado Libre y usa merchat como tu asistente desde la herramienta de IA que prefieras.</p><div>{landing.steps.map(([number, title, description], i) => <article key={number}><div className="step-symbol"><StepIcon step={i} /></div><div className="step-title"><span className="step-number">{number}</span><h3>{title}</h3></div><p>{description}</p></article>)}</div></section>
+    <section id="como-funciona" className="steps shell"><SectionTitle>Cómo funciona</SectionTitle><p className="steps-intro">Crea tu cuenta, conecta Mercado Libre y usa merchat como tu asistente desde la herramienta de IA que prefieras.</p><div>{landing.steps.map(([number, title, description], i) => <article key={number}><div className="step-symbol"><StepIcon step={i} /></div><div className="step-title"><h3>{title}</h3></div><p>{description}</p></article>)}</div></section>
 
     <section id="funciones" className="functions-group">
       <section className="features shell"><SectionTitle>Lo que puedes hacer con merchat</SectionTitle><div>{landing.features.map(([icon, title, items]) => <article key={title}><span className="feature-icon"><img src={icon} alt="" width="96" height="96" /></span><h3>{title}</h3><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></section>
