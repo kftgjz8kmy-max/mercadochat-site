@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>merchat — Pregunta viva</title>
+    <style>
+      :root { --navy:#142f5c; --blue:#2d69f3; --pale:#edf4ff; --line:#dbe5f4; --green:#32a852; --yellow:#f9bf2b; }
+      * { box-sizing:border-box; }
+      body { margin:0; min-height:100vh; display:grid; place-items:center; overflow:hidden; color:var(--navy); font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:transparent; }
+      .stage { width:min(94vw, 1050px); aspect-ratio:16/9; min-height:520px; position:relative; display:grid; place-items:center; }
+      .halo { display:none; }
+      .chat { width:min(78%, 810px); height:min(78%, 570px); min-height:480px; overflow:hidden; position:relative; z-index:1; border:1px solid #e0e9f7; border-radius:31px; background:rgba(255,255,255,.88); box-shadow:0 31px 80px rgba(24, 53, 101, .16), 0 7px 18px rgba(24, 53, 101, .05), inset 0 1px rgba(255,255,255,.95); backdrop-filter:blur(20px); }
+      .topbar { height:56px; position:relative; z-index:10; display:flex; align-items:center; justify-content:flex-end; padding:0 25px; border-bottom:1px solid #e3ebf6; background:#fbfdff; box-shadow:0 5px 14px rgba(35,72,130,.055); isolation:isolate; }
+      .topbar img { position:absolute; left:25px; top:50%; display:block; width:102px; height:auto; object-fit:contain; transform:translateY(calc(-50% + 3px)); }
+      .online { display:flex; align-items:center; gap:9px; font-size:14px; font-weight:650; }
+      .online i { width:9px; height:9px; border-radius:50%; background:var(--green); box-shadow:0 0 0 4px #dff4e4; }
+      .scene { position:absolute; inset:56px 0 0; opacity:0; pointer-events:none; animation:scene 40s infinite; }
+      .scene-1 { animation-delay:0s; --scene-delay:0s; }.scene-2 { animation-delay:10s; --scene-delay:10s; }.scene-3 { animation-delay:20s; --scene-delay:20s; }.scene-4 { animation-delay:30s; --scene-delay:30s; }
+      .question { position:absolute; top:22px; right:28px; width:min(72%, 545px); min-height:86px; padding:10px 14px 9px; border:1px solid #c8dcff; border-radius:17px 17px 5px 17px; background:linear-gradient(135deg,#f1f6ff,#dce9ff); font-size:14px; font-weight:620; line-height:1.48; letter-spacing:-.012em; box-shadow:0 10px 23px rgba(50,105,243,.08); transform-origin:100% 100%; animation:question 40s infinite; animation-delay:inherit; }
+      .message-line { display:block; min-height:39px; }
+      .question .brand { display:inline-block; width:auto; height:14px; margin:0 3px -2px 0; opacity:.96; vertical-align:baseline; }
+      .brand-name { margin-right:6px; color:#3E7AF5; font-size:14px; font-weight:500; line-height:1.48; letter-spacing:-.025em; }
+      .typing { position:relative; display:inline; }
+      .typing.is-typing::after,.response-text.is-typing::after { content:""; display:inline-block; width:1.5px; height:1.04em; margin:0 0 -2px 2px; background:#3974ec; animation:cursor .7s steps(1,end) infinite; }
+      .timestamp { display:block; margin-top:4px; text-align:right; color:#6680aa; font-size:10px; font-weight:650; letter-spacing:.02em; }
+      .thinking { position:absolute; top:131px; left:32px; display:flex; align-items:center; gap:9px; color:#6b82a9; font-size:12px; animation:thinking 40s infinite; animation-delay:inherit; }
+      .thinking span { display:flex; gap:3px; }.thinking i { width:5px; height:5px; border-radius:50%; background:#4778e8; animation:pulse 1s infinite alternate; }.thinking i:nth-child(2){animation-delay:.2s}.thinking i:nth-child(3){animation-delay:.4s}
+      .response-text { position:absolute; top:160px; left:32px; right:32px; margin:0; color:#244775; font-size:14px; font-weight:620; line-height:1.48; letter-spacing:-.012em; animation:response-text 40s infinite; animation-delay:inherit; }
+      .result { position:absolute; top:204px; left:32px; right:32px; padding:16px 18px; border:1px solid var(--line); border-radius:16px 16px 16px 5px; background:rgba(252,253,255,.98); box-shadow:0 13px 28px rgba(30,65,126,.07); animation:result 40s infinite; animation-delay:inherit; }
+      .result-head { display:flex; align-items:center; justify-content:space-between; gap:15px; margin-bottom:15px; }.result-head b { font-size:14px; letter-spacing:-.015em; }.result-head small { color:#6781a9; font-size:11px; }
+      .result-summary { margin:-7px 0 12px; color:#647fa8; font-size:11px; font-weight:600; font-variant-numeric:tabular-nums; }
+      .rank-row { display:grid; grid-template-columns:25px 1fr auto auto; gap:11px; align-items:center; padding:9px 0; border-top:1px solid #edf1f7; font-size:12px; }.rank-row i { width:22px; height:22px; display:grid; place-items:center; border-radius:7px; background:#edf3ff; color:var(--blue); font-size:10px; font-style:normal; font-weight:800; }.rank-row span { font-weight:640; }.rank-row small { color:#7790b7; }.rank-row strong { font-size:12px; font-variant-numeric:tabular-nums; }
+      .photo-result { display:grid; grid-template-columns:75px 1fr; gap:15px; align-items:center; }.photos { height:75px; position:relative; }.photo { position:absolute; width:51px; height:65px; border:3px solid white; border-radius:8px; background:linear-gradient(145deg,#a9cdfc,#4075d8 46%,#172a62 47%,#f3c38c 48%,#f8e2c9); box-shadow:0 5px 12px #27436e26; }.photo:nth-child(1){left:2px;top:5px;transform:rotate(-9deg)}.photo:nth-child(2){left:21px;top:1px;transform:rotate(8deg);background:linear-gradient(145deg,#d5ecff,#8bbaef 47%,#1c356f 48%,#dbb66c 49%,#f5dcad)}
+      .photo-copy b,.promotion-copy b,.price-copy b { display:block; font-size:14px; }.photo-copy span { display:inline-block; margin-top:7px; border-radius:99px; padding:4px 8px; color:#19713a; background:#e4f7e9; font-size:11px; font-weight:700; }.photo-copy small { display:block; margin-top:7px; color:#6a82a8; font-size:11px; }.photo-copy .missing { color:#456897; font-weight:650; }
+      .promotion { display:grid; grid-template-columns:58px 1fr auto; gap:13px; align-items:center; }.product-tile { width:56px;height:58px;border-radius:10px;background:linear-gradient(145deg,#d6e8ff,#6796df 50%,#f4d39b 51%); }.promotion-copy small,.price-copy small { display:block; margin-top:5px; color:#6a82a8; font-size:11px; }.ready { padding:7px 10px; border-radius:9px; color:#166f3c; background:#e5f7e9; font-size:11px; font-weight:750; white-space:nowrap; }
+      .price { display:grid; grid-template-columns:1fr 142px; gap:18px; align-items:stretch; }.price-analysis { min-width:0; }.price-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }.price-heading small { display:block; color:#6a82a8; font-size:11px; font-weight:650; }.price-heading b { display:block; margin-top:3px; font-size:15px; letter-spacing:-.02em; }.market-badge { flex:none; padding:4px 7px; border-radius:99px; color:#2d69f3; background:#edf3ff; font-size:10px; font-weight:750; }.range-track { height:12px; position:relative; margin-top:20px; border-radius:99px; background:#e8eef8; }.range-window { position:absolute; top:0; bottom:0; left:20%; width:57%; border-radius:99px; background:linear-gradient(90deg,#8ab0ff,#4d82f4); box-shadow:0 3px 8px rgba(45,105,243,.17); }.current-marker { position:absolute; top:-7px; left:82%; width:25px; height:25px; border:4px solid white; border-radius:50%; background:var(--yellow); box-shadow:0 3px 9px rgba(129,92,18,.25); }.current-marker:after { content:"Tu precio · S/ 1,399"; position:absolute; right:-17px; bottom:29px; padding:4px 6px; border:1px solid #f1d188; border-radius:7px; color:#8a650b; background:#fff7dd; font-size:9px; font-style:normal; font-weight:750; white-space:nowrap; }.price-scale { display:flex; justify-content:space-between; margin-top:8px; color:#7790b7; font-size:10px; font-variant-numeric:tabular-nums; }.recommendation { display:flex; flex-direction:column; justify-content:center; padding:13px 14px; border:1px solid #cfe0ff; border-radius:14px; background:linear-gradient(145deg,#f6f9ff,#e7f0ff); box-shadow:inset 0 1px rgba(255,255,255,.8); }.recommendation small { color:#5877a6; font-size:10px; font-weight:650; }.recommendation b { margin-top:5px; color:var(--blue); font-size:22px; letter-spacing:-.04em; line-height:1; }.recommendation span { margin-top:6px; color:#19713a; font-size:10px; font-weight:750; }
+      .input { position:absolute; left:32px; right:32px; bottom:24px; display:flex; align-items:center; justify-content:space-between; padding:13px 16px; border:1px solid #d9e3f1; border-radius:14px; color:#94a6c0; background:#fff; font-size:12px; box-shadow:0 5px 13px rgba(39,80,145,.03); animation:composer-scroll 40s infinite; animation-delay:var(--scene-delay); }.input svg { width:18px; color:var(--blue); }
+      @keyframes scene { 0%,1.25%{opacity:0;transform:translateY(0)} 3%,20%{opacity:1;transform:translateY(0)} 21%,24.5%{opacity:1;transform:translateY(-64px)} 25%,100%{opacity:0;transform:translateY(-64px)} }
+      @keyframes question { 0%,1.75%{opacity:0;transform:translate(22px,12px) scale(.96)} 3%,24.5%{opacity:1;transform:none} 25%,100%{opacity:0} }
+      @keyframes cursor { 50%{opacity:0} }
+      @keyframes thinking { 0%,14%{opacity:0;transform:translateY(7px)} 15%,16.5%{opacity:1;transform:none} 17.5%,100%{opacity:0} }
+      @keyframes response-text { 0%,16%{opacity:0;transform:translateY(7px)} 17%,24.5%{opacity:1;transform:none} 25%,100%{opacity:0} }
+      @keyframes result { 0%,18%{opacity:0;transform:translateY(13px) scale(.98)} 19%,24.5%{opacity:1;transform:none} 25%,100%{opacity:0} }
+      @keyframes composer-scroll { 0%,20%{transform:translateY(0)} 21%,25%,100%{transform:translateY(64px)} }
+      @keyframes pulse { to { transform:translateY(-3px); opacity:.45; } }
+      /* Continuous conversation mode: scenes become one scrollable message history. */
+      .continuous-chat .chat-viewport { position:absolute; top:56px; right:0; bottom:68px; left:0; overflow:hidden; }
+      .continuous-chat .chat-stream { padding:22px 32px 82px; transition:transform 900ms cubic-bezier(.22,.78,.24,1); will-change:transform; }
+      .continuous-chat .scene { position:relative; inset:auto; display:block; min-height:0; max-height:0; margin:0; overflow:hidden; opacity:0; transform:translateY(16px); animation:none; transition:max-height .55s ease,opacity .42s ease,transform .55s ease,margin .55s ease; }
+      .continuous-chat .scene.is-active,.continuous-chat .scene.is-complete { max-height:640px; margin-bottom:28px; opacity:1; transform:none; }
+      .continuous-chat .scene.is-positioning { opacity:0; transform:translateY(12px); }
+      .continuous-chat .question { position:relative; top:auto; right:auto; width:min(72%,545px); min-height:0; margin:0 0 17px auto; animation:none; }
+      .continuous-chat .thinking,.continuous-chat .response-text,.continuous-chat .result { position:relative; top:auto; left:auto; right:auto; display:none; opacity:0; transform:translateY(7px); animation:none; }
+      .continuous-chat .thinking { margin:0 0 10px; }
+      .continuous-chat .response-text { margin:0 0 12px; }
+      .continuous-chat .result { margin:0; }
+      .continuous-chat .scene.show-thinking .thinking { display:flex; opacity:1; transform:none; transition:opacity .28s ease,transform .28s ease; }
+      .continuous-chat .scene.show-response .response-text { display:block; opacity:1; transform:none; transition:opacity .28s ease,transform .28s ease; }
+      .continuous-chat .scene.show-result .result { display:block; opacity:1; transform:none; transition:opacity .36s ease,transform .36s ease; }
+      .continuous-chat .scene.show-result .result.photo-result,
+      .continuous-chat .scene.show-result .result.promotion,
+      .continuous-chat .scene.show-result .result.price { display:grid; }
+      .continuous-chat .scene .input { display:none; }
+      .continuous-chat .shared-input { z-index:2; animation:none!important; transform:none!important; }
+      @media (min-width:681px) {
+        .continuous-chat .response-text { padding:10px 13px 11px; border:1px solid #e1eaf9; border-radius:5px 14px 14px 14px; color:#1e416e; background:linear-gradient(135deg,#fbfdff,#f2f7ff); box-shadow:0 7px 16px rgba(41,82,150,.045); font-weight:620; }
+        .continuous-chat .response-text:before { content:"merchat"; display:block; margin-bottom:3px; color:#4a7ef2; font-size:10px; font-weight:760; letter-spacing:.02em; text-transform:uppercase; }
+        .continuous-chat .result { border-color:#d7e4f6; border-radius:15px 15px 15px 5px; background:linear-gradient(145deg,#ffffff,#f9fbff); box-shadow:0 12px 26px rgba(30,65,126,.075); }
+        .continuous-chat .result-head { margin-bottom:11px; }
+        .continuous-chat .result-head b { color:#173969; font-size:14px; }
+        .continuous-chat .result-head small { padding:4px 7px; border-radius:99px; color:#4d75ab; background:#eef4ff; font-weight:700; }
+        .continuous-chat .result-summary { margin:0 0 10px; padding:7px 9px; border-radius:9px; color:#496b9f; background:#f2f6fd; font-size:11px; }
+        .continuous-chat .rank-row { grid-template-columns:25px minmax(0,1fr) auto auto; gap:12px; padding:10px 0; }
+        .continuous-chat .rank-row span { color:#254775; }
+        .continuous-chat .rank-row strong { min-width:70px; color:#173969; text-align:right; }
+        .continuous-chat .photo-result { background:linear-gradient(145deg,#ffffff,#f8fbff); }
+        .continuous-chat .photo-copy .missing { margin-top:8px; padding:5px 7px; border-radius:7px; color:#315b93; background:#f0f5ff; }
+        .continuous-chat .promotion { gap:20px; background:linear-gradient(145deg,#ffffff,#f7fbff); }
+        .continuous-chat .ready { padding:8px 13px; color:#fff; background:linear-gradient(135deg,#2d69f3,#4b7df2); box-shadow:0 5px 11px rgba(45,105,243,.19); transform:translateY(9px); }
+        .continuous-chat .price { background:linear-gradient(145deg,#ffffff,#f8fbff); }
+        .continuous-chat .price-analysis { display:flex; flex-direction:column; justify-content:center; }
+        .continuous-chat .price-note { display:block; margin-top:8px; color:#5d7aa4; font-size:11px; font-weight:650; }
+        .continuous-chat .recommendation { border-color:#bbd2ff; background:linear-gradient(145deg,#f2f7ff,#e0ecff); }
+      }
+      @media (max-width:680px) { .continuous-chat .chat-stream { padding-inline:19px; } }
+      @media (prefers-reduced-motion:reduce) { *,*:before,*:after { animation:none!important; } .scene-1 { opacity:1; }.question,.result,.typing { opacity:1; transform:none; }.thinking { display:none; } }
+      @media (max-width:680px) { .stage { width:100vw; min-height:100vh; aspect-ratio:auto; }.chat { width:94%; height:620px; min-height:0; }.topbar { padding:0 20px; }.scene { inset:74px 0 0; }.question { top:24px; right:19px; width:82%; font-size:13px; }.thinking { left:19px; top:149px; }.response-text { left:19px; right:19px; top:178px; }.result { left:19px; right:19px; top:226px; }.rank-row { grid-template-columns:22px 1fr auto; }.rank-row small { display:none; }.input { left:19px;right:19px; }.price { grid-template-columns:1fr; gap:11px; }.current-marker:after { right:-10px; }.recommendation { flex-direction:row; align-items:center; justify-content:space-between; text-align:left; padding:10px 12px; }.recommendation b { margin:0; }.recommendation span { display:none; } }
+      html.iphone-preview,html.iphone-preview body { width:100%; height:100%; min-height:0; overflow:hidden; background:#f8fbff; }
+      .iphone-preview .stage { width:100%; height:100%; min-height:0; aspect-ratio:auto; }.iphone-preview .halo,.iphone-preview .caption { display:none; }.iphone-preview .chat { width:100%; height:100%; min-height:0; border:0; border-radius:0; box-shadow:none; }
+      html.desktop-embed,html.desktop-embed body { width:100%; height:100%; min-width:0; min-height:0; overflow:hidden; background:transparent; }
+      html.desktop-embed body { position:relative; display:block; }
+      .desktop-embed .stage { position:absolute; inset:0; width:100%; height:100%; min-width:0; min-height:0; padding:72px; aspect-ratio:auto; }
+      .desktop-embed .halo,.desktop-embed .caption { display:none; }
+      .desktop-embed .chat { width:100%; height:100%; min-height:0; box-shadow:0 20px 38px rgba(20,47,92,.12),0 7px 16px rgba(20,47,92,.055),0 1px 2px rgba(20,47,92,.06),inset 0 1px rgba(255,255,255,.96); }
+      .desktop-embed .response-text { line-height:1.52; }
+      .desktop-embed .result { padding:18px 20px; }
+      @media (max-width:680px) { .desktop-embed .stage { padding:48px; } .desktop-embed .chat { border-radius:24px; } }
+      @media (max-width:680px) { .iphone-preview .scene { inset:56px 0 0; }.iphone-preview .question { top:18px; right:14px; width:85%; }.iphone-preview .thinking { top:138px; }.iphone-preview .response-text { top:164px; font-size:13px; }.iphone-preview .result { top:212px; }.iphone-preview .input { bottom:20px; }.iphone-preview .promotion { grid-template-columns:43px 1fr; gap:9px; align-items:center; }.iphone-preview .product-tile { width:43px; height:46px; border-radius:8px; }.iphone-preview .promotion-copy b { font-size:11px; }.iphone-preview .promotion-copy small { margin-top:4px; font-size:9px; }.iphone-preview .ready { grid-column:1 / -1; width:100%; margin-top:5px; padding:7px 8px; border-radius:8px; text-align:center; font-size:9px; }.iphone-preview .photo-copy b,.iphone-preview .price-copy b { font-size:12px; }.iphone-preview .photo-copy small,.iphone-preview .price-copy small,.iphone-preview .price-current { font-size:9px; }.iphone-preview .result-summary { font-size:9px; } }
+    </style>
+  </head>
+  <body>
+    <main class="stage" aria-label="Animación Pregunta viva para merchat">
+      <div class="halo"></div>
+      <section class="chat">
+        <header class="topbar"><img src="../../brand/merchat-logo.png" alt="merchat" /><span class="online"><i></i>En línea</span></header>
+        <article class="scene scene-1"><div class="question"><div class="message-line"><img class="brand" src="./merchat-conversation-mark.svg" alt="" /><span class="brand-name">merchat</span><span class="typing" data-text="¿Cuáles fueron mis productos más vendidos este mes y cuánto facturó cada uno?"></span></div><span class="timestamp">10:32 ✓✓</span></div><div class="thinking"><span><i></i><i></i><i></i></span>Revisando tus ventas…</div><p class="response-text" data-text="Estos son los productos que más vendiste este mes:"></p><div class="result"><div class="result-head"><b>Productos más vendidos</b><small>Este mes</small></div><p class="result-summary">112 unidades vendidas · S/ 21,888 facturados</p><div class="rank-row"><i>1</i><span>Audífonos Bluetooth</span><small>47 unidades</small><strong>S/ 11,703</strong></div><div class="rank-row"><i>2</i><span>Cargador USB-C 20W</span><small>36 unidades</small><strong>S/ 6,444</strong></div><div class="rank-row"><i>3</i><span>Soporte para celular</span><small>29 unidades</small><strong>S/ 3,741</strong></div></div><div class="input">Escribe tu mensaje… <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 4 15 8-15 8 3-8z"/><path d="M8 12h12"/></svg></div></article>
+        <article class="scene scene-2"><div class="question"><div class="message-line"><img class="brand" src="./merchat-conversation-mark.svg" alt="" /><span class="brand-name">merchat</span><span class="typing" data-text="Crea una publicación con estas fotos y pregúntame lo que falte."></span></div><span class="timestamp">10:34 ✓✓</span></div><div class="thinking"><span><i></i><i></i><i></i></span>Identificando el producto…</div><p class="response-text" data-text="Ya identifiqué el producto. Para publicarlo, solo necesito:"></p><div class="result photo-result"><div class="photos"><i class="photo"></i><i class="photo"></i></div><div class="photo-copy"><b>Samsung Galaxy A56 · 256 GB</b><span>✓ Producto identificado</span><small class="missing">Confirma el color y el precio de venta.</small></div></div><div class="input">Escribe tu mensaje… <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 4 15 8-15 8 3-8z"/><path d="M8 12h12"/></svg></div></article>
+        <article class="scene scene-3"><div class="question"><div class="message-line"><img class="brand" src="./merchat-conversation-mark.svg" alt="" /><span class="brand-name">merchat</span><span class="typing" data-text="Agrega esta publicación a la promoción Ofertas de la Semana."></span></div><span class="timestamp">10:36 ✓✓</span></div><div class="thinking"><span><i></i><i></i><i></i></span>Revisando requisitos…</div><p class="response-text" data-text="La publicación está lista para sumarse a esta promoción:"></p><div class="result promotion"><div class="product-tile"></div><div class="promotion-copy"><b>Ofertas de la Semana</b><small>10% de descuento · 7 días</small></div><span class="ready">Confirmar</span></div><div class="input">Escribe tu mensaje… <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 4 15 8-15 8 3-8z"/><path d="M8 12h12"/></svg></div></article>
+        <article class="scene scene-4"><div class="question"><div class="message-line"><img class="brand" src="./merchat-conversation-mark.svg" alt="" /><span class="brand-name">merchat</span><span class="typing" data-text="Compara mi precio con publicaciones similares y recomiéndame un precio competitivo."></span></div><span class="timestamp">10:38 ✓✓</span></div><div class="thinking"><span><i></i><i></i><i></i></span>Comparando publicaciones…</div><p class="response-text" data-text="Tu precio está por encima del mercado. Para competir mejor:"></p><div class="result price"><div class="price-analysis"><div class="price-heading"><div><small>Rango competitivo</small><b>S/ 1,249 — S/ 1,349</b></div><span class="market-badge">Mercado</span></div><small class="price-note">Tu precio actual: S/ 1,399</small></div><div class="recommendation"><small>Precio sugerido</small><b>S/ 1,349</b><span>Más competitivo</span></div></div><div class="input">Escribe tu mensaje… <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m5 4 15 8-15 8 3-8z"/><path d="M8 12h12"/></svg></div></article>
+      </section>
+      <script>
+        const previewParams = new URLSearchParams(window.location.search);
+        if (previewParams.has("device")) document.documentElement.classList.add("iphone-preview");
+        if (previewParams.has("embed")) document.documentElement.classList.add("desktop-embed");
+        const chat = document.querySelector(".chat");
+        const scenes = [...document.querySelectorAll(".scene")];
+        const typingNodes = scenes.map((scene) => scene.querySelector(".typing"));
+        const responseNodes = scenes.map((scene) => scene.querySelector(".response-text"));
+        const activeTimeouts = new Set();
+        const activeIntervals = new Set();
+        let viewport;
+        let stream;
+        function schedule(callback, delay) {
+          const timer = window.setTimeout(() => {
+            activeTimeouts.delete(timer);
+            callback();
+          }, delay);
+          activeTimeouts.add(timer);
+          return timer;
+        }
+        function clearAnimationTimers() {
+          activeTimeouts.forEach((timer) => window.clearTimeout(timer));
+          activeIntervals.forEach((timer) => window.clearInterval(timer));
+          activeTimeouts.clear();
+          activeIntervals.clear();
+        }
+        function writeMessage(node) {
+          const message = node.dataset.text || "";
+          node.textContent = "";
+          node.classList.add("is-typing");
+          let character = 0;
+          const timer = window.setInterval(() => {
+            node.textContent += message[character] || "";
+            character += 1;
+            if (character >= message.length) {
+              window.clearInterval(timer);
+              activeIntervals.delete(timer);
+              node.classList.remove("is-typing");
+            }
+          }, 28);
+          activeIntervals.add(timer);
+        }
+
+        function resetMessage(node) {
+          node.textContent = "";
+          node.classList.remove("is-typing");
+        }
+
+        function reserveScrollTail() {
+          // Keep enough invisible room below the last message so a new question
+          // can always settle at the top of the viewport.
+          stream.style.paddingBottom = `${viewport.clientHeight + 32}px`;
+        }
+
+        function moveHistoryTo(scene) {
+          reserveScrollTail();
+          const offset = Math.max(0, Math.min(scene.offsetTop - 22, stream.scrollHeight - viewport.clientHeight));
+          stream.style.transform = `translateY(${-offset}px)`;
+        }
+
+        function placeQuestionForTyping(scene) {
+          reserveScrollTail();
+          const question = scene.querySelector(".question");
+          const questionBottom = scene.offsetTop + question.offsetTop + question.offsetHeight;
+          const offset = Math.max(0, Math.min(questionBottom - viewport.clientHeight + 20, stream.scrollHeight - viewport.clientHeight));
+          stream.style.transition = "none";
+          stream.style.transform = `translateY(${-offset}px)`;
+          window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+            stream.style.transition = "";
+          }));
+        }
+
+        function revealScene(index, shouldScroll) {
+          const scene = scenes[index];
+          scene.classList.add("is-active");
+
+          if (shouldScroll) {
+            // A new question enters near the composer without a visible scroll.
+            // The history moves only once merchat starts preparing its answer.
+            schedule(() => placeQuestionForTyping(scene), 40);
+            schedule(() => writeMessage(typingNodes[index]), 420);
+          } else {
+            schedule(() => writeMessage(typingNodes[index]), 420);
+          }
+
+          schedule(() => {
+            moveHistoryTo(scene);
+            scene.classList.add("show-thinking");
+          }, 4300);
+          schedule(() => {
+            scene.classList.remove("show-thinking");
+            scene.classList.add("show-response");
+            writeMessage(responseNodes[index]);
+          }, 5550);
+          schedule(() => scene.classList.add("show-result"), 7200);
+          schedule(() => {
+            scene.classList.add("is-complete");
+            if (index < scenes.length - 1) {
+              schedule(() => revealScene(index + 1, true), 3600);
+            } else {
+              schedule(resetConversation, 4200);
+            }
+          }, 7200);
+        }
+
+        function resetConversation() {
+          clearAnimationTimers();
+          stream.style.transition = "none";
+          stream.style.transform = "translateY(0)";
+          scenes.forEach((scene) => {
+            scene.classList.remove("is-active", "is-complete", "is-positioning", "show-thinking", "show-response", "show-result");
+          });
+          typingNodes.forEach(resetMessage);
+          responseNodes.forEach(resetMessage);
+          window.requestAnimationFrame(() => {
+            stream.style.transition = "";
+            revealScene(0, false);
+          });
+        }
+
+        function setupConversation() {
+          chat.classList.add("continuous-chat");
+          const header = chat.querySelector(".topbar");
+          viewport = document.createElement("div");
+          viewport.className = "chat-viewport";
+          stream = document.createElement("div");
+          stream.className = "chat-stream";
+          viewport.append(stream);
+          const sharedInput = scenes[0].querySelector(".input").cloneNode(true);
+          sharedInput.classList.add("shared-input");
+          scenes.forEach((scene) => stream.append(scene));
+          header.insertAdjacentElement("afterend", viewport);
+          chat.append(sharedInput);
+          reserveScrollTail();
+          window.addEventListener("resize", reserveScrollTail);
+
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            const firstScene = scenes[0];
+            firstScene.classList.add("is-active", "is-complete", "show-response", "show-result");
+            typingNodes[0].textContent = typingNodes[0].dataset.text || "";
+            responseNodes[0].textContent = responseNodes[0].dataset.text || "";
+            return;
+          }
+
+          resetConversation();
+        }
+
+        setupConversation();
+      </script>
+    </main>
+  </body>
+</html>

@@ -238,20 +238,12 @@ export default function Home() {
         <div className="button-row"><div className="primary-cta"><Button icon href={siteConfig.trialUrl}>Comienza Gratis</Button><p className="trial-note">14 días gratis <span aria-hidden="true">-</span> Sin tarjeta</p></div><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
         <div className="quick-points"><span><img src="/images/quick-points/publish.png" alt="" width="28" height="28" /><span>Publica sin complicaciones</span></span><span><img src="/images/quick-points/clock.png" alt="" width="28" height="28" /><span>Ahorra horas<br className="quick-point-break" /> de trabajo manual</span></span><span><img src="/images/quick-points/language.png" alt="" width="28" height="28" /><span>Gestiona tu cuenta con<br className="quick-point-break" /> lenguaje natural</span></span></div>
       </div>
-      <div className="hero-visual" aria-label={`Ejemplo de una conversación con ${siteConfig.name}`}>
-        <div className="chat-window">
-          <div className="chat-header"><strong>{siteConfig.name}</strong><span><i />En línea</span></div>
-          <div className="chat-body">
-            <div className="chat-message chat-message-user">¿Cuáles son mis productos más vendidos<br />y cuánto facturaron en los últimos 30 días?<small>10:32 <b><HeroIcon name="double-check" size={15} /></b></small></div>
-            <div className="chat-message chat-message-assistant">Aquí tienes tus productos más vendidos<br />y su facturación de los últimos 30 días.<small>10:32</small></div>
-            <div className="sales-table">
-              <div className="sales-table-head"><span>Producto</span><span>Unidades vendidas</span><span>Facturación</span></div>
-              {[['Auriculares Bluetooth Inalámbricos','47','S/ 11,703'],['Cargador Rápido USB-C 20W','36','S/ 6,444'],['Soporte para Celular de Auto','29','S/ 3,741'],['Cable USB-C a Lightning 1m','24','S/ 2,136'],['Smartwatch Deportivo IP68','18','S/ 8,442']].map(([name, units, total]) => <div className="sales-table-row" key={name}><span>{name}</span><span>{units}</span><span>{total}</span></div>)}
-            </div>
-            <div className="chat-input">Escribe tu mensaje... <b><HeroIcon name="send" size={20} /></b></div>
-            <p className="chat-disclaimer">{siteConfig.name} puede cometer errores. Verifica siempre la información importante.</p>
-          </div>
-        </div>
+      <div className="hero-visual hero-animation" aria-label={`Ejemplo animado de una conversación con ${siteConfig.name}`}>
+        <iframe
+          className="hero-animation-frame"
+          src="/animations/pregunta-viva/pregunta-viva.html?embed=hero"
+          title={`Ejemplo animado de una conversación con ${siteConfig.name}`}
+        />
       </div>
     </section>
 
