@@ -1308,6 +1308,69 @@ main section[id]:not(#inicio) {
     margin-top:5px;
   }
 
+  /* On small screens, make the current monthly price the visual anchor.
+     The previous price and discount support it without shifting its center. */
+  .price-card {
+    padding-top:36px;
+  }
+
+  .price-card.featured {
+    padding-top:40px;
+  }
+
+  .popular {
+    top:-12px;
+    padding:5px 14px;
+    font-size:11px;
+    letter-spacing:.025em;
+    box-shadow:0 6px 14px rgb(37 99 235 / 15%);
+  }
+
+  .plan-header {
+    gap:12px;
+  }
+
+  .price-card h3 {
+    font-size:25px;
+    line-height:1.15;
+  }
+
+  .price-card .audience {
+    max-width:290px;
+    font-size:16px;
+    line-height:1.45;
+  }
+
+  .price {
+    position:relative;
+    min-height:58px;
+    margin:22px 0 14px;
+    padding:0 84px 22px;
+    align-items:center;
+    flex-wrap:nowrap;
+    gap:0;
+  }
+
+  .price-card ul {
+    margin-top:10px;
+  }
+
+  .price del {
+    position:absolute;
+    right:calc(50% + 63px);
+    white-space:nowrap;
+  }
+
+  .price > small:last-of-type {
+    margin-left:0;
+  }
+
+  .price-discount {
+    position:absolute;
+    left:calc(50% + 66px);
+    margin:0;
+  }
+
   .header nav {
     gap:2px;
     padding:12px 16px 16px;
