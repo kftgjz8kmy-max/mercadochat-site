@@ -78,6 +78,7 @@ function ShowcaseCards({ duplicate = false }: { duplicate?: boolean }) {
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
   const [activeShowcasePage, setActiveShowcasePage] = useState(0);
   const showcaseRef = useRef<HTMLDivElement>(null);
   const showcasePausedRef = useRef(false);
@@ -87,6 +88,24 @@ export default function Home() {
   const showcaseTouchRef = useRef({ active: false, startX: 0, startY: 0, lastX: 0, startScroll: 0 });
   const [isDraggingShowcase, setIsDraggingShowcase] = useState(false);
   const showcasePages = 4;
+  useEffect(() => {
+    const sections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]"));
+    const updateActiveSection = () => {
+      const anchor = 110;
+      const active = sections.find((section) => {
+        const bounds = section.getBoundingClientRect();
+        return bounds.top <= anchor && bounds.bottom > anchor;
+      });
+      setActiveSection(active?.id ?? "");
+    };
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+    return () => {
+      window.removeEventListener("scroll", updateActiveSection);
+      window.removeEventListener("resize", updateActiveSection);
+    };
+  }, []);
   useEffect(() => {
     let previousTime = Date.now();
     const interval = window.setInterval(() => {
@@ -183,10 +202,24 @@ export default function Home() {
     setIsDraggingShowcase(false);
     scheduleShowcaseResume(900);
   };
+  const navigateToSection = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const href = event.currentTarget.getAttribute("href");
+    const id = href?.startsWith("#") ? href.slice(1) : "";
+    const section = id ? document.getElementById(id) : null;
+    if (!section) return;
+    event.preventDefault();
+    const anchor = section.querySelector<HTMLElement>(".section-title") ?? section;
+    const headerOffset = 98;
+    const top = anchor.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.history.pushState(null, "", href);
+    setActiveSection(id);
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    setMobileMenuOpen(false);
+  };
   return <main>
     <header className="header shell">
       <a href="#inicio" className="brand" aria-label={siteConfig.name}><img className="brand-logo-full" src={siteConfig.brand.logo} alt={siteConfig.name} width="190" height="56" /><img className="brand-logo-icon" src={siteConfig.brand.icon} alt="" width="48" height="48" /></a>
-      <nav className={mobileMenuOpen ? "mobile-nav-open" : ""}>{siteConfig.navigation.map((item) => <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.label}{"icon" in item && item.icon === "lightbulb" && <img className="nav-lightbulb" style={{ transform: "translateY(-2px)" }} src="/images/lightbulb-idea.png" alt="" aria-hidden="true" width="18" height="18" />}</a>)}</nav>
+      <nav className={mobileMenuOpen ? "mobile-nav-open" : ""}>{siteConfig.navigation.map((item) => <a className={activeSection === item.href.slice(1) ? "is-active" : undefined} aria-current={activeSection === item.href.slice(1) ? "location" : undefined} key={item.href} href={item.href} onClick={navigateToSection}>{item.label}{"icon" in item && item.icon === "lightbulb" && <img className="nav-lightbulb" style={{ transform: "translateY(-2px)" }} src="/images/lightbulb-idea.png" alt="" aria-hidden="true" width="18" height="18" />}</a>)}</nav>
       <Button href={siteConfig.trialUrl}>Comienza Gratis</Button>
       <button className="mobile-menu" type="button" aria-label="Abrir menú" aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}><span /><span /><span /></button>
     </header>
@@ -203,7 +236,7 @@ export default function Home() {
         <h1>Gestiona Mercado Libre hablando con una IA que <em>entiende tu negocio.</em></h1>
         <p className="hero-description">{landing.hero.description}</p>
         <div className="button-row"><div className="primary-cta"><Button icon href={siteConfig.trialUrl}>Comienza Gratis</Button><p className="trial-note">14 días gratis <span aria-hidden="true">-</span> Sin tarjeta</p></div><Button outline href="#como-funciona">Ver cómo funciona</Button></div>
-        <div className="quick-points"><span><img src="/images/quick-points/publish.png" alt="" width="28" height="28" />Publica sin complicaciones</span><span><img src="/images/quick-points/clock.png" alt="" width="28" height="28" />Ahorra horas de trabajo manual</span><span><img src="/images/quick-points/language.png" alt="" width="28" height="28" />Gestiona tu cuenta con lenguaje natural</span></div>
+        <div className="quick-points"><span><img src="/images/quick-points/publish.png" alt="" width="28" height="28" /><span>Publica sin complicaciones</span></span><span><img src="/images/quick-points/clock.png" alt="" width="28" height="28" /><span>Ahorra horas<br className="quick-point-break" /> de trabajo manual</span></span><span><img src="/images/quick-points/language.png" alt="" width="28" height="28" /><span>Gestiona tu cuenta con<br className="quick-point-break" /> lenguaje natural</span></span></div>
       </div>
       <div className="hero-visual" aria-label={`Ejemplo de una conversación con ${siteConfig.name}`}>
         <div className="chat-window">
@@ -222,21 +255,22 @@ export default function Home() {
       </div>
     </section>
 
-    <section id="como-funciona" className="steps shell"><SectionTitle>Cómo funciona</SectionTitle><p className="steps-intro">Crea tu cuenta, conecta Mercado Libre y usa merchat como tu asistente desde la herramienta de IA que prefieras.</p><div>{landing.steps.map(([number, title, description], i) => <article key={number}><div className="step-symbol"><StepIcon step={i} /></div><div className="step-title"><h3>{title}</h3></div><p>{description}</p></article>)}</div></section>
-
     <section id="funciones" className="functions-group">
       <section className="features shell"><SectionTitle>Lo que puedes hacer con merchat</SectionTitle><div>{landing.features.map(([icon, title, items]) => <article key={title}><span className="feature-icon"><img src={icon} alt="" width="96" height="96" /></span><h3>{title}</h3><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>)}</div></section>
-
       <section id="resultados" className="showcase shell"><SectionTitle level="h3">Pídele a merchat lo que necesitas</SectionTitle><div ref={showcaseRef} className={`showcase-carousel ${isDraggingShowcase ? "is-dragging" : ""}`} aria-label={`Ejemplos de conversaciones y resultados en ${siteConfig.name}`} onPointerDown={startShowcaseDrag} onPointerMove={dragShowcase} onPointerUp={stopShowcaseDrag} onPointerCancel={stopShowcaseDrag} onTouchStart={startShowcaseTouch} onTouchMove={moveShowcaseTouch} onTouchEnd={stopShowcaseTouch} onTouchCancel={stopShowcaseTouch} onScroll={(event) => { const loopWidth = event.currentTarget.scrollWidth / 2; setActiveShowcasePage(Math.min(showcasePages - 1, Math.floor((event.currentTarget.scrollLeft % loopWidth) / (loopWidth / showcasePages)))); }}><div className="carousel"><ShowcaseCards /><ShowcaseCards duplicate /></div></div><div className="dots" aria-label="Navegación de ejemplos">{Array.from({ length: showcasePages }, (_, index) => <button key={index} className={activeShowcasePage === index ? "active" : ""} onClick={() => moveShowcase(index)} aria-label={`Ver ejemplos ${index + 1}`} aria-current={activeShowcasePage === index} />)}</div></section>
     </section>
 
-    <section id="seguridad" className="trust shell"><SectionTitle>Tu cuenta y tus datos permanecen protegidos</SectionTitle><div>{landing.trust.map((item, i) => <article key={item}><span className="trust-icon"><img src={trustIconSources[i] ?? trustIconSources[0]} alt="" width="48" height="48" /></span>{item}</article>)}</div></section>
+    <div className="post-pricing-background">
+      <section id="como-funciona" className="steps shell"><SectionTitle>Cómo funciona</SectionTitle><p className="steps-intro">Crea tu cuenta, conecta Mercado Libre y usa merchat como tu asistente desde la herramienta de IA que prefieras.</p><div>{landing.steps.map(([number, title, description], i) => <article key={number}><div className="step-symbol"><StepIcon step={i} /></div><div className="step-title"><h3>{title}</h3></div><p>{description}</p></article>)}</div></section>
 
-    <section id="planes" className="pricing shell"><SectionTitle>Planes para cada tipo de operación</SectionTitle><p className="pricing-intro">Empieza gratis. Elige tu plan cuando estés listo.<br />Prueba merchat durante 14 días y conoce todo lo que puede hacer por tu operación antes de decidir cómo continuar.<br /><span>Precios promocionales de lanzamiento: 50% de descuento en todos los planes.</span></p><div className="pricing-grid">{landing.plans.map((plan) => <article className={`price-card ${plan.featured ? 'featured' : ''}`} key={plan.name}>{plan.featured && <span className="popular">RECOMENDADO</span>}<div className="plan-header"><h3>{plan.name}</h3><p className="audience">{plan.audience}</p></div><p className="price"><del>S/{plan.originalPrice}</del><small>{plan.prefix}</small>S/{plan.price}<small> /mes</small><span className="price-discount">50% OFF</span></p><p className="setup">{plan.setup}</p><ul>{plan.items.map((item) => <li className={item.startsWith("Todo lo incluido") ? "feature-inherited" : undefined} key={item}><svg className="feature-check" viewBox="0 0 20 20" aria-hidden="true"><path d="m4.2 10.2 3.5 3.5 8-8" /></svg><span>{item}</span></li>)}</ul><Button outline={!plan.featured} href={plan.name === "Vendedor Pro" ? siteConfig.trialUrl : siteConfig.whatsappUrl}>{plan.cta}</Button>{plan.name === "Vendedor Pro" && <p className="plan-note">Sin tarjeta</p>}</article>)}</div></section>
+      <section id="seguridad" className="trust shell"><SectionTitle>Tu cuenta y tus datos permanecen protegidos</SectionTitle><div>{landing.trust.map((item, i) => <article key={item}><span className="trust-icon"><img src={trustIconSources[i] ?? trustIconSources[0]} alt="" width="48" height="48" /></span>{item}</article>)}</div></section>
 
-    <section id="faq" className="faq shell"><SectionTitle>Preguntas frecuentes</SectionTitle><div className="faq-grid">{landing.faqs.map(([question, answer]) => <article key={question}><details><summary><span>{question}</span><span className="faq-toggle" aria-hidden="true" /></summary><p>{answer}</p></details></article>)}</div></section>
+      <section id="planes" className="pricing shell"><SectionTitle>Planes para cada tipo de operación</SectionTitle><p className="pricing-intro">Empieza con 14 días gratis. Descubre todo lo que merchat puede hacer por tu operación y elige tu plan cuando estés listo.<br /><span>Obtén 50% de descuento en todos los planes.</span></p><div className="pricing-grid">{landing.plans.map((plan) => <article className={`price-card ${plan.featured ? 'featured' : ''}`} key={plan.name}>{plan.featured && <span className="popular">RECOMENDADO</span>}<div className="plan-header"><h3>{plan.name}</h3><p className="audience">{plan.audience}</p></div><p className="price"><del>S/{plan.originalPrice}</del><small>{plan.prefix}</small>S/{plan.price}<small> /mes</small><span className="price-discount">50% OFF</span></p><p className="setup">{plan.setup}</p><ul>{plan.items.map((item) => <li className={item.startsWith("Todo lo incluido") ? "feature-inherited" : undefined} key={item}><svg className="feature-check" viewBox="0 0 20 20" aria-hidden="true"><path d="m4.2 10.2 3.5 3.5 8-8" /></svg><span>{item}</span></li>)}</ul><Button outline={!plan.featured} href={plan.name === "Vendedor Pro" ? siteConfig.trialUrl : siteConfig.whatsappUrl}>{plan.cta}</Button>{plan.name === "Vendedor Pro" && <p className="plan-note">Sin tarjeta</p>}</article>)}</div></section>
 
-    <section id="ia-negocios" className="closing shell"><div><h2>¿Necesitas una <em>solución de IA para tu empresa?</em></h2><p>Diseñamos asistentes, automatizaciones y herramientas inteligentes para reducir trabajo manual y mejorar la forma en que trabaja tu equipo.</p><Button>Cuéntanos qué quieres automatizar</Button><small>Asistentes IA · Automatizaciones · Herramientas internas</small></div><div className="device-scene"><div className="laptop"><div className="screen"><b>{siteConfig.name}</b><strong>IA a medida</strong><div className="mini-line" /></div></div><div className="phone"><b>Proyectos</b><span>Activos</span></div><i /><i /></div></section>
-    <footer className="shell"><img className="footer-brand" src={siteConfig.brand.logo} alt={siteConfig.name} width="280" height="90" />© {new Date().getFullYear()} {siteConfig.name}. IA para vendedores y empresas.</footer>
+      <section id="faq" className="faq shell"><SectionTitle>Preguntas frecuentes</SectionTitle><div className="faq-grid">{landing.faqs.map(([question, answer]) => <article key={question}><details><summary><span>{question}</span><span className="faq-toggle" aria-hidden="true" /></summary><p>{answer}</p></details></article>)}</div></section>
+
+      <section id="ia-negocios" className="closing shell"><div><h2>¿Necesitas una <em>solución de IA para tu empresa?</em></h2><p>Diseñamos asistentes, automatizaciones y herramientas inteligentes para reducir trabajo manual y mejorar la forma en que trabaja tu equipo.</p><Button>Cuéntanos qué quieres automatizar</Button><small>Asistentes IA · Automatizaciones · Herramientas internas</small></div><div className="device-scene"><div className="laptop"><div className="screen"><b>{siteConfig.name}</b><strong>IA a medida</strong><div className="mini-line" /></div></div><div className="phone"><b>Proyectos</b><span>Activos</span></div><i /><i /></div></section>
+      <footer className="shell"><img className="footer-brand" src={siteConfig.brand.logo} alt={siteConfig.name} width="280" height="90" />© {new Date().getFullYear()} {siteConfig.name}. IA para vendedores y empresas.</footer>
+    </div>
   </main>;
 }

@@ -9,10 +9,10 @@ export const siteConfig = {
   },
   navigation: [
     { label: "Cómo funciona", href: "#como-funciona" },
-    { label: "Funciones", href: "#funciones" },
-    { label: "Planes", href: "#planes" },
+    { label: "Qué puedes hacer", href: "#funciones" },
+    { label: "Precios", href: "#planes" },
     { label: "Seguridad", href: "#seguridad" },
     { label: "FAQ", href: "#faq" },
-    { label: "IA para empresas", href: "#ia-negocios", icon: "lightbulb" },
+    { label: "IA a medida", href: "#ia-negocios", icon: "lightbulb" },
   ],
 } as const;
