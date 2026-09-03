@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element -- Vinext's local dev renderer is incompatible with next/image; fixed-dimension local HiDPI assets are intentional. */
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { landing, type UseCaseCard } from "@/config/landing";
 import { siteConfig } from "@/config/site";
 
@@ -28,6 +28,14 @@ function Button({ children, outline = false, href = siteConfig.whatsappUrl, icon
 function SectionTitle({ children, id, level = "h2" }: { children: React.ReactNode; id?: string; level?: "h2" | "h3" }) {
   const Heading = level;
   return <Heading id={id} className="section-title">{children}</Heading>;
+}
+
+function FaqAnswer({ answer }: { answer: string }) {
+  const paragraphs = answer.split("\n\n");
+  return <>{paragraphs.map((paragraph, paragraphIndex) => <Fragment key={`${paragraphIndex}-${paragraph}`}>
+    {paragraph.split(/(\*\*[^*]+\*\*)/g).map((part, partIndex) => part.startsWith("**") && part.endsWith("**") ? <strong key={`${paragraphIndex}-${partIndex}`}>{part.slice(2, -2)}</strong> : part)}
+    {paragraphIndex < paragraphs.length - 1 && <><br /><br /></>}
+  </Fragment>)}</>;
 }
 
 const stepIconSources = [
@@ -259,7 +267,7 @@ export default function Home() {
 
       <section id="planes" className="pricing shell"><SectionTitle>Planes para cada tipo de operación</SectionTitle><p className="pricing-intro">Empieza con 14 días gratis. Descubre todo lo que merchat puede hacer por tu operación y elige tu plan cuando estés listo.<br /><span>Obtén 50% de descuento en todos los planes.</span></p><div className="pricing-grid">{landing.plans.map((plan) => <article className={`price-card ${plan.featured ? 'featured' : ''}`} key={plan.name}>{plan.featured && <span className="popular">RECOMENDADO</span>}<div className="plan-header"><h3>{plan.name}</h3><p className="audience">{plan.audience}</p></div><p className="price"><del>S/{plan.originalPrice}</del><small>{plan.prefix}</small>S/{plan.price}<small> /mes</small><span className="price-discount">50% OFF</span></p><p className="setup">{plan.setup}</p><ul>{plan.items.map((item) => <li className={item.startsWith("Todo lo incluido") ? "feature-inherited" : undefined} key={item}><svg className="feature-check" viewBox="0 0 20 20" aria-hidden="true"><path d="m4.2 10.2 3.5 3.5 8-8" /></svg><span>{item}</span></li>)}</ul><Button outline={!plan.featured} href={plan.name === "Vendedor" || plan.name === "Vendedor Pro" ? siteConfig.trialUrl : siteConfig.whatsappUrl}>{plan.cta}</Button>{(plan.name === "Vendedor" || plan.name === "Vendedor Pro") && <p className="plan-note">Sin tarjeta</p>}</article>)}</div></section>
 
-      <section id="faq" className="faq shell"><SectionTitle>Preguntas frecuentes</SectionTitle><div className="faq-grid">{landing.faqs.map(([question, answer]) => <article key={question}><details><summary><span>{question}</span><span className="faq-toggle" aria-hidden="true" /></summary><p>{answer}</p></details></article>)}</div></section>
+      <section id="faq" className="faq shell"><SectionTitle>Preguntas frecuentes</SectionTitle><div className="faq-grid">{landing.faqs.map(([question, answer]) => <article key={question}><details name="faq"><summary><span>{question}</span><span className="faq-toggle" aria-hidden="true" /></summary><p><FaqAnswer answer={answer} /></p></details></article>)}</div></section>
 
       <section id="ia-negocios" className="closing shell"><div><h2>¿Necesitas una <em>solución de IA para tu empresa?</em></h2><p>Diseñamos asistentes, automatizaciones y herramientas inteligentes para reducir trabajo manual y mejorar la forma en que trabaja tu equipo.</p><Button>Cuéntanos qué quieres automatizar</Button><small>Asistentes IA · Automatizaciones · Herramientas internas</small></div><div className="device-scene"><div className="laptop"><div className="screen"><b>{siteConfig.name}</b><strong>IA a medida</strong><div className="mini-line" /></div></div><div className="phone"><b>Proyectos</b><span>Activos</span></div><i /><i /></div></section>
       <footer className="shell"><img className="footer-brand" src={siteConfig.brand.logo} alt={siteConfig.name} width="280" height="90" />© {new Date().getFullYear()} {siteConfig.name}. IA para vendedores y empresas.</footer>
